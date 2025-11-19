@@ -1,233 +1,96 @@
 <template>
-  <div class="course-card">
-    <div class="course-card-header">
-      <h3 class="course-title">{{ course.title }}</h3>
-      <span class="course-category">{{ course.category }}</span>
+  <a 
+    :href="course.slideUrl" 
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex cursor-pointer flex-col gap-3 rounded-xl border border-solid border-transparent bg-card-light p-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-primary/50 dark:bg-card-dark dark:hover:border-primary/50"
+  >
+    <div 
+      class="aspect-video w-full rounded-lg bg-cover bg-center bg-no-repeat"
+      :style="getCoverStyle()"
+      @error="onImageError"
+    ></div>
+    <div class="flex flex-1 flex-col">
+      <p class="text-base font-semibold leading-normal">{{ course.title }}</p>
+      <p class="mt-1 flex-1 text-sm text-slate-600 dark:text-slate-300">{{ course.description }}</p>
     </div>
-    
-    <p class="course-description">{{ course.description }}</p>
-    
-    <div class="course-meta">
-      <span class="course-author">👤 {{ course.author }}</span>
-      <span class="course-date">📅 {{ course.date }}</span>
-    </div>
-    
-    <div class="course-tags">
+    <div class="mt-2 flex flex-wrap gap-1">
+      <span :class="getCategoryClass()">{{ course.category }}</span>
       <span 
-        v-for="tag in course.tags" 
-        :key="tag" 
-        class="course-tag"
-        @click="$emit('tag-click', tag)"
+        v-for="(tag, index) in course.tags.slice(0, 3)" 
+        :key="tag"
+        :class="getTagClass(index)"
       >
         {{ tag }}
       </span>
     </div>
-    
-    <div class="course-actions">
-      <a 
-        :href="course.slideUrl" 
-        target="_blank" 
-        class="btn btn-primary"
-        rel="noopener noreferrer"
-        title="需要先构建课程（npm run build）"
-      >
-        🎯 进入演讲模式
-      </a>
-      <button 
-        class="btn btn-secondary"
-        @click="copyDevCommand"
-        title="复制 Slidev 开发命令"
-      >
-        💻 开发预览
-      </button>
-    </div>
-  </div>
+  </a>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { Course } from '../../../../scripts/scan-courses'
 
 const props = defineProps<{
   course: Course
 }>()
 
-defineEmits<{
-  'tag-click': [tag: string]
-}>()
+const imageError = ref(false)
 
-function copyDevCommand() {
-  const command = `npx slidev ${props.course.path}`
-  
-  // 复制到剪贴板
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(command).then(() => {
-      alert(`已复制开发命令到剪贴板：\n\n${command}\n\n请在终端中运行此命令来预览课程`)
-    }).catch(() => {
-      alert(`开发命令：\n\n${command}\n\n请在终端中运行此命令来预览课程`)
-    })
-  } else {
-    alert(`开发命令：\n\n${command}\n\n请在终端中运行此命令来预览课程`)
+// 分类到颜色的映射
+const categoryColors: Record<string, string> = {
+  '前端开发': 'inline-block rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  '后端开发': 'inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-200',
+  '运维开发': 'inline-block rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  '数据结构': 'inline-block rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200',
+  '计算机基础': 'inline-block rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+  '人工智能': 'inline-block rounded bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+}
+
+// 标签颜色数组（多色）
+const tagColors = [
+  'inline-block rounded bg-pink-100 px-2 py-0.5 text-xs font-medium text-pink-800 dark:bg-pink-900 dark:text-pink-200',
+  'inline-block rounded bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
+  'inline-block rounded bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-800 dark:bg-teal-900 dark:text-teal-200',
+  'inline-block rounded bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+  'inline-block rounded bg-cyan-100 px-2 py-0.5 text-xs font-medium text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+]
+
+function getCategoryClass() {
+  return categoryColors[props.course.category] || 'inline-block rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+}
+
+function getTagClass(index: number) {
+  return tagColors[index % tagColors.length]
+}
+
+function getCoverStyle() {
+  if (imageError.value) {
+    // 使用渐变背景作为备用
+    return {
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }
   }
+  
+  // 使用默认的占位图片或课程封面
+  const defaultImages: Record<string, string> = {
+    '前端': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBRSEXY--Hk7J2XlV4dBEpAfn3UCQekdd7xQnNeo1SR7BAjxEAfmxNCZjLrFm9usH_TVvDtKze4AqbOa2Q3-LFxAn6jvdWGuK5R8yRNiVJWev8Zxb1aUUTKQJ-uypQFJccGHKuOuIJnDkNLO24BAHBa_y2cy9qosL2TZMQBjSLqP5tRnY_gPc25WzhB3U7YXQWDOdHF5VBd4DqyQ0bQHysZHY2urj8Sie_2YuBaJEumg5yWzMdsebnYoDbSeIzCr2PMKJb5M7_f0HI',
+    '数据结构': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCg70SJZt7wjRqDRaXoPDQmZUI0OXc2ZD4NlzDAHVEYXMp6Nweh1_2RPtEcqUimQM8mUlopiK_jdL_OP_w1lYWqBipZb_XGQkWfUUdgMOeBDIQEi_97A8IwX-f1EKZb4ZaGIwDK13mGaTNnIWZUK6fxSF0vA7ee9zJCnRnd4CMxGU60EmmVYhc61R09mR0VlPwPEIB7n6yMen-o3SlBUz-ixCXrYJZHutrt9-YFcK3f1S-_qDiW4fT6MtbAwTlKAomGlfMjrYzQnBU',
+    '后端': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuV5CHD57Gp-9tG4WyPkAqbzMojatT8xDnCH0CzK9-RvdCWvdRx9yYqaAsywJPCd8IrR4uw-maRQVxk84ARzW9Z-P5VJnG1PvuvYPoM9fHSc3s04KX60rzwUpc1RWxpCqd576F7ERUD7ca87MM040jGmabXZxaUhj1hNjNXUo8-yE6JCAI0IDlVHqT4yvha5ZV62kq9cAK8iHsc5l8iYtahOHouhdNxB59WqKC764rvABRd0rRna7G6HOuzVsD0MZcILyW4232T9E',
+    '计算机基础': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDEJaobfqb5gaGY-IQoPHdWPKbdn9bgaf5CCROx3s5yyieX9xXdqZ4FKmCHxRavtW6n6ls03RQyVQ9B-4KlYilRzLHGJ8l66c4r8aJq_jOzN2PDsX804ElcCKYsEu40X2t-A1E0Uf-4kzC0AD90nvtYjYoc44rkvTJgp8GroC9DgCe6K0MHakJMRo2UorJWEc2RqCXRRORGevMVtgc0QXyg0BWjvv6dia31dPTUm9TPEidpFiN1xxjcL3_mMdckcDbvImGNMaFWgEw',
+    '人工智能': 'https://lh3.googleusercontent.com/aida-public/AB6AXuD4TnhrrWQ7z6SsV70vOVYk_5yS5jilZ2whlhXilx7Hy1ayM2q4kfpZo4EEMY3tqg8CtblKO11cFZzZn1jb665W-mbmZtq2Jjtd4xV5nD2xfrB3fb0yu91X0oJvpn42ylUiCsPaQKL-a6RJtm1E71TbjZThPsZUuXtjslfo6Pue-6KlMIwOlwqh0SEz8fKb7Y1SGQa2wM8TBXxlioQivFa_ZzJKVzysSE2SZ7wErGEfFnM_ZynLVbkPdSXBa6DSm5n6iMZBdbI8Q5c',
+  }
+  
+  const imageUrl = props.course.coverImage || defaultImages[props.course.category] || defaultImages['计算机基础']
+  
+  return {
+    backgroundImage: `url("${imageUrl}")`,
+    backgroundColor: '#e5e7eb'
+  }
+}
+
+function onImageError() {
+  imageError.value = true
 }
 </script>
 
-<style scoped>
-.course-card {
-  background: var(--course-card-bg);
-  border: 1px solid var(--course-card-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.course-card:hover {
-  background: var(--course-card-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.course-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.course-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--vp-c-text-1);
-  flex: 1;
-  line-height: 1.4;
-}
-
-.course-category {
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-dark);
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.course-description {
-  color: var(--vp-c-text-2);
-  font-size: 1rem;
-  line-height: 1.6;
-  margin: 0 0 1rem 0;
-  flex: 1;
-}
-
-.course-meta {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-  color: var(--vp-c-text-3);
-}
-
-.course-author,
-.course-date {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.course-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.course-tag {
-  background: var(--tag-bg);
-  color: var(--tag-text);
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.course-tag:hover {
-  background: var(--vp-c-brand);
-  color: white;
-  transform: scale(1.05);
-}
-
-.course-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btn {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background: var(--vp-c-brand);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--vp-c-brand-dark);
-  transform: scale(1.02);
-}
-
-.btn-secondary {
-  background: var(--vp-c-bg-mute);
-  color: var(--vp-c-text-1);
-  border: 1px solid var(--vp-c-divider);
-}
-
-.btn-secondary:hover {
-  background: var(--vp-c-bg-soft);
-  border-color: var(--vp-c-brand);
-  color: var(--vp-c-brand);
-}
-
-@media (max-width: 768px) {
-  .course-card {
-    padding: 1rem;
-  }
-  
-  .course-title {
-    font-size: 1.25rem;
-  }
-  
-  .course-card-header {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .course-category {
-    align-self: flex-start;
-  }
-  
-  .course-actions {
-    flex-direction: column;
-  }
-  
-  .btn {
-    font-size: 0.9rem;
-    padding: 0.6rem 0.875rem;
-  }
-}
-</style>

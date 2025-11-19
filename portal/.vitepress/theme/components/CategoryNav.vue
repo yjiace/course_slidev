@@ -1,15 +1,12 @@
 <template>
   <div class="category-nav">
-    <h3 class="category-nav-title">📚 课程分类</h3>
-    
     <div class="category-list">
       <button
         class="category-item"
         :class="{ active: selectedCategory === null }"
         @click="selectCategory(null)"
       >
-        <span class="category-name">全部课程</span>
-        <span class="category-count">{{ totalCourses }}</span>
+        全部
       </button>
       
       <button
@@ -19,8 +16,7 @@
         :class="{ active: selectedCategory === category.name }"
         @click="selectCategory(category.name)"
       >
-        <span class="category-name">{{ category.name }}</span>
-        <span class="category-count">{{ category.count }}</span>
+        {{ category.name }}
       </button>
     </div>
   </div>
@@ -49,44 +45,32 @@ function selectCategory(category: string | null) {
 
 <style scoped>
 .category-nav {
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  padding: 1.5rem;
+  margin-top: 1.5rem;
   margin-bottom: 2rem;
-}
-
-.category-nav-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  color: var(--vp-c-text-1);
 }
 
 .category-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .category-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: var(--vp-c-bg);
-  border: 2px solid var(--vp-c-divider);
-  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   color: var(--vp-c-text-1);
+  font-weight: 500;
 }
 
 .category-item:hover {
-  background: var(--category-hover);
-  border-color: var(--vp-c-brand-light);
-  transform: translateY(-2px);
+  background: var(--vp-c-bg-mute);
+  border-color: var(--vp-c-brand);
+  transform: translateY(-1px);
 }
 
 .category-item.active {
@@ -95,38 +79,18 @@ function selectCategory(category: string | null) {
   color: white;
 }
 
-.category-item.active .category-count {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-.category-name {
-  font-weight: 500;
-}
-
-.category-count {
-  background: var(--vp-c-bg-mute);
-  color: var(--vp-c-text-2);
-  padding: 0.125rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  min-width: 1.5rem;
-  text-align: center;
-}
-
 @media (max-width: 768px) {
   .category-nav {
-    padding: 1rem;
+    margin-top: 1rem;
   }
   
   .category-list {
-    gap: 0.5rem;
+    gap: 0.375rem;
   }
   
   .category-item {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.4rem 0.875rem;
+    font-size: 0.875rem;
   }
 }
 </style>

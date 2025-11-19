@@ -1,16 +1,15 @@
 # 软件学院现代化课件系统
 
-基于 VitePress + Slidev 的混合架构课件系统，为软件学院提供现代化的课堂演讲和课程管理解决方案。
+基于 VitePress + Slidev 的混合架构课件系统，为软件学院提供现代化的课程门户和演讲课件。
 
 ## ✨ 特性
 
 - 📚 **课程门户** - 自动扫描和展示所有课程
 - 🎯 **演讲课件** - Slidev 构建的现代化幻灯片
 - 🔍 **智能搜索** - 支持课程标题、描述、标签的全文搜索
-- 🏷️ **分类标签** - 按教研室分类和标签组织课程
+- 🏷️ **分类筛选** - 按教研室分类组织课程
 - ⚡ **增量构建** - 智能检测变更，减少构建时间
-- 🚀 **自动部署** - EdgeOne 自动拉取和部署
-- 🎨 **响应式设计** - 适配各种屏幕尺寸
+- 🎨 **现代化设计** - 响应式布局，支持深色模式
 
 ---
 
@@ -22,38 +21,37 @@
 npm install
 ```
 
-### 一键启动
+### 查看完整系统
 
 ```bash
 npm start
 ```
 
-访问 http://localhost:4173，查看课程门户并点击课程进入演讲模式。
+访问 http://localhost:4173 查看课程门户并点击课程进入演讲模式。
 
 ---
 
 ## 🔧 开发模式
 
-### 场景1：开发课程内容（推荐）
+### ⚠️ 重要说明
 
-编辑课程并实时预览：
+- **开发模式** (`npm run dev`) - 只启动门户，课程链接会404（正常现象）
+- **完整模式** (`npm start`) - 构建所有课程后预览，所有功能正常
+
+### 开发课程内容
 
 ```bash
-# 终端1：启动门户（查看课程列表）
+# 终端1：启动门户
 npm run dev
 
-# 终端2：启动课程实时预览
+# 终端2：预览单个课程
 npx slidev courses/frontend/vue-basics/slides.md
 ```
 
-- 门户：http://localhost:5173
-- 课程：http://localhost:3030
+- 门户地址：http://localhost:5173
+- 课程地址：http://localhost:3030
 
-**提示**：在门户中点击"💻 开发预览"按钮可以复制对应课程的命令。
-
-### 场景2：开发门户界面
-
-修改门户组件、样式：
+### 开发门户界面
 
 ```bash
 npm run dev
@@ -61,56 +59,187 @@ npm run dev
 
 访问 http://localhost:5173
 
-### 场景3：测试完整系统
-
-测试从门户点击进入课程的完整流程：
-
-```bash
-npm start
-```
-
 ---
 
 ## 📝 创建新课程
 
 ### 1. 创建课程目录
 
+在 `courses` 目录下按照教研室分类创建课程目录：
+
 ```bash
-mkdir -p courses/frontend/my-new-course
+mkdir -p courses/frontend/vue-basics
 ```
+
+支持的分类：
+- `frontend` - 前端开发
+- `backend` - 后端开发
+- `devops` - 运维开发
+- 其他：数据结构、计算机基础、人工智能
 
 ### 2. 创建 slides.md
 
+在课程目录下创建 `slides.md` 文件：
+
 ```markdown
 ---
-title: 我的新课程
+title: Vue.js 基础教程
 category: 前端开发
-tags: [JavaScript, Vue, 入门]
-description: 这是一个新课程的描述
-author: 你的名字
-date: 2024-01-20
+tags: [Vue, JavaScript, 组件化]
+description: 从零开始学习Vue.js框架
+author: 张老师
+date: 2024-01-15
+level: beginner
+duration: 8
+cover: cover.jpg
 ---
 
-# 我的新课程
+# Vue.js 基础教程
 
-欢迎来到新课程！
+从零开始学习Vue.js框架
 
 ---
 
-# 第二页
+# 课程大纲
 
-课程内容...
+- Vue.js 简介
+- 响应式数据绑定
+- 组件化开发
+- 生命周期钩子
+
+---
+
+# 更多内容...
 ```
 
 ### 3. 预览课程
 
 ```bash
-npx slidev courses/frontend/my-new-course/slides.md
+npx slidev courses/frontend/vue-basics/slides.md
 ```
+
+访问 http://localhost:3030 查看课程。
 
 ### 4. 查看门户
 
-刷新门户页面，新课程会自动出现！
+启动门户后，新课程会自动出现在列表中：
+
+```bash
+npm run dev
+```
+
+访问 http://localhost:5173
+
+---
+
+## 📋 课程元数据说明
+
+### 必填字段
+
+| 字段 | 说明 | 示例 |
+|------|------|------|
+| `title` | 课程标题 | `Vue.js 基础教程` |
+| `category` | 课程分类 | `前端开发` |
+| `tags` | 标签数组 | `[Vue, JavaScript]` |
+| `description` | 课程描述 | `从零开始学习Vue.js` |
+
+### 可选字段
+
+| 字段 | 说明 | 默认值 | 示例 |
+|------|------|--------|------|
+| `author` | 作者姓名 | `未知作者` | `张老师` |
+| `date` | 创建日期 | 当前日期 | `2024-01-15` |
+| `level` | 难度级别 | `beginner` | `intermediate` |
+| `duration` | 课时数 | 无 | `8` |
+| `cover` | 封面图片 | 默认封面 | `cover.jpg` |
+
+### 难度级别
+
+- `beginner` - 初级（蓝色标签）
+- `intermediate` - 中级（绿色标签）
+- `advanced` - 高级（红色标签）
+- `expert` - 专家（紫色标签）
+
+---
+
+## 🖼️ 添加封面图
+
+### 1. 准备封面图片
+
+- **推荐尺寸**：640x360 像素（16:9 比例）
+- **支持格式**：JPG、PNG、SVG
+- **文件大小**：建议小于 500KB
+
+### 2. 放置封面图片
+
+将封面图片放在课程目录下：
+
+```
+courses/frontend/vue-basics/
+├── slides.md
+└── cover.jpg        # 封面图片
+```
+
+### 3. 在元数据中引用
+
+```yaml
+---
+title: Vue.js 基础教程
+cover: cover.jpg     # 相对于课程目录的路径
+---
+```
+
+### 4. 默认封面
+
+如果不指定封面图，系统会根据课程分类自动使用默认封面：
+
+- **前端开发** - 蓝色渐变
+- **后端开发** - 绿色渐变
+- **数据结构** - 橙色渐变
+- **计算机基础** - 紫色渐变
+- **人工智能** - 紫罗兰渐变
+- **运维开发** - 青色渐变
+
+---
+
+## 📖 Slidev 语法
+
+### 基本语法
+
+```markdown
+# 标题
+
+内容...
+
+---
+
+# 下一页
+
+更多内容...
+```
+
+### 代码高亮
+
+````markdown
+```javascript
+const message = 'Hello World'
+console.log(message)
+```
+````
+
+### 布局
+
+```markdown
+---
+layout: center
+---
+
+# 居中布局
+```
+
+### 更多语法
+
+详见 [Slidev 官方文档](https://sli.dev/)
 
 ---
 
@@ -130,27 +259,38 @@ npx slidev courses/frontend/my-new-course/slides.md
 
 ### 部署流程
 
-1. 推送代码到 Git 仓库
-2. EdgeOne 自动拉取代码
-3. 执行 `npm install`
-4. 执行 `npm run build`
-5. 部署 `dist/portal` 目录
-6. 自动刷新 CDN 缓存
+1. **推送代码**
+   ```bash
+   git add .
+   git commit -m "Update courses"
+   git push origin main
+   ```
 
-### 构建说明
+2. **自动构建**
+   - EdgeOne 自动拉取代码
+   - 执行 `npm install`
+   - 执行 `npm run build`
 
-- **首次构建**：约 1-2 分钟（需要构建所有课程）
+3. **自动部署**
+   - 部署 `dist/portal` 目录
+   - 自动刷新 CDN 缓存
+
+### 构建时间
+
+- **首次构建**：约 1-2 分钟（构建所有课程）
 - **增量构建**：约 30-60 秒（只构建修改的课程）
-- **构建缓存**：系统自动使用 `.buildcache` 目录加速构建
 
-### 推荐的 CDN 缓存规则
+### CDN 缓存配置
+
+推荐的缓存规则：
 
 | 路径 | 缓存时间 | 说明 |
 |------|---------|------|
 | `/*.html` | 5 分钟 | HTML 文件 |
-| `/assets/*.js` | 1 年 | JS 文件（带哈希） |
-| `/assets/*.css` | 1 年 | CSS 文件（带哈希） |
+| `/assets/*.js` | 1 年 | JS 文件（带哈希值） |
+| `/assets/*.css` | 1 年 | CSS 文件（带哈希值） |
 | `/courses/**/*` | 1 天 | 课程内容 |
+| `/images/**/*` | 1 个月 | 图片资源 |
 
 ---
 
@@ -159,10 +299,10 @@ npx slidev courses/frontend/my-new-course/slides.md
 | 命令 | 说明 |
 |------|------|
 | `npm start` | 构建并预览完整系统 |
-| `npm run dev` | 开发门户界面 |
+| `npm run dev` | 开发门户（课程链接会404） |
 | `npm run build` | 构建所有内容 |
 | `npm run preview` | 预览构建结果 |
-| `npx slidev <path>` | 实时预览课程 |
+| `npx slidev <path>` | 预览单个课程 |
 
 ---
 
@@ -170,50 +310,73 @@ npx slidev courses/frontend/my-new-course/slides.md
 
 ```
 courseware-system/
-├── courses/                        # 课程目录
-│   ├── frontend/                   # 前端开发教研室
-│   ├── backend/                    # 后端开发教研室
-│   └── devops/                     # 运维开发教研室
-├── portal/                         # VitePress 门户
+├── courses/                    # 课程目录
+│   ├── frontend/              # 前端开发
+│   ├── backend/               # 后端开发
+│   └── devops/                # 运维开发
+├── portal/                    # VitePress 门户
 │   ├── .vitepress/
-│   │   ├── config.ts              # VitePress 配置
-│   │   ├── theme/                 # 自定义主题
-│   │   │   ├── components/        # Vue 组件
-│   │   │   └── styles/            # 自定义样式
-│   │   └── data/
-│   │       └── courses.data.ts    # 课程数据加载器
-│   └── index.md                    # 门户首页
-├── scripts/                        # 构建脚本
-│   ├── build-all.js               # 完整构建脚本
-│   ├── incremental-build.js       # 增量构建脚本
-│   └── scan-courses-simple.js     # 课程扫描器
-├── docs/                           # 文档目录
-├── dist/                           # 构建输出（自动生成）
-├── .buildcache/                    # 构建缓存（自动生成）
-├── package.json                    # 项目配置
-└── tsconfig.json                   # TypeScript 配置
+│   │   ├── config.ts         # 配置文件
+│   │   ├── theme/            # 自定义主题
+│   │   └── data/             # 数据加载器
+│   └── index.md              # 首页
+├── scripts/                   # 构建脚本
+├── dist/                      # 构建输出
+└── package.json              # 项目配置
 ```
 
 ---
 
-## 💡 开发技巧
+## 🐛 常见问题
 
-### 快速预览课程
+### Q: 点击课程卡片显示404？
 
-在门户中点击"💻 开发预览"按钮，自动复制 Slidev 命令到剪贴板。
+**A:** 需要先构建课程。运行 `npm start` 查看完整系统。
 
-### 增量构建
+开发模式（`npm run dev`）不会构建课程，这是正常的。
 
-系统会自动检测文件变更，只构建修改过的课程。
+### Q: 修改课程后没有更新？
 
-### 清除缓存
+**A:** 
+- **开发模式**：Slidev 会自动热重载
+- **预览模式**：需要重新运行 `npm run build`
 
-如果遇到缓存问题：
+### Q: 课程没有出现在门户中？
 
+**A:** 检查以下几点：
+1. 文件名必须是 `slides.md`
+2. 元数据包含所有必填字段（title、category、tags、description）
+3. 重启开发服务器
+
+### Q: 封面图片不显示？
+
+**A:** 
+1. 检查图片路径是否正确
+2. 确保图片文件存在
+3. 检查图片格式是否支持（JPG、PNG、SVG）
+
+### Q: EdgeOne 构建失败？
+
+**A:** 
+1. 检查 Node.js 版本是否为 18+
+2. 检查课程元数据格式是否正确
+3. 查看 EdgeOne 构建日志获取详细错误
+4. 本地运行 `npm run build` 测试
+
+### Q: 部署后课程内容未更新？
+
+**A:** 
+1. 清除浏览器缓存
+2. 在 EdgeOne 控制台刷新 CDN 缓存
+3. 检查是否触发了新的构建
+4. 查看构建日志确认构建成功
+
+### Q: 如何清除构建缓存？
+
+**A:**
 ```bash
 # Windows
-rmdir /s /q .buildcache
-rmdir /s /q dist
+rmdir /s /q .buildcache dist
 
 # Linux/Mac
 rm -rf .buildcache dist
@@ -222,72 +385,49 @@ rm -rf .buildcache dist
 npm run build
 ```
 
-### 同时开发多个课程
-
-在不同终端启动多个 Slidev 实例：
-
-```bash
-# 终端1
-npx slidev courses/frontend/vue-basics/slides.md --port 3030
-
-# 终端2
-npx slidev courses/backend/nodejs-intro/slides.md --port 3031
-```
-
----
-
-## 🐛 常见问题
-
-### Q: 门户显示课程，但点击后 404？
-
-A: 需要先构建课程。运行 `npm start`
-
-### Q: 修改课程后没有更新？
-
-A: 
-- 开发模式：Slidev 会自动热重载
-- 预览模式：需要重新运行 `npm run build`
-
-### Q: EdgeOne 构建失败？
-
-A: 
-1. 检查 Node.js 版本是否为 18 或更高
-2. 检查课程元数据格式是否正确
-3. 查看 EdgeOne 构建日志获取详细错误
-
-### Q: 课程内容没有更新？
-
-A: 
-1. 检查 EdgeOne 构建日志，确认构建成功
-2. 清除浏览器缓存
-3. 在 EdgeOne 控制台刷新 CDN 缓存
-
-### Q: 构建时间过长？
-
-A: 首次构建需要构建所有课程，后续构建会使用增量构建，速度会快很多。
-
 ---
 
 ## 🎓 最佳实践
 
-1. **日常开发**：使用 `npm run dev` + `npx slidev` 组合
-2. **测试验证**：使用 `npm start` 测试完整流程
-3. **提交前**：运行 `npm run build` 确保构建成功
-4. **课程元数据**：确保填写完整的 frontmatter（title、category、tags、description）
-5. **命名规范**：使用小写字母和连字符命名课程目录（如 `vue-basics`）
+### 日常开发
+
+1. 使用 `npm run dev` + `npx slidev` 组合开发
+2. 门户查看课程列表，Slidev 实时预览课程内容
+3. 修改课程后自动热重载
+
+### 提交前检查
+
+```bash
+# 1. 本地构建测试
+npm run build
+
+# 2. 预览构建结果
+npm run preview
+
+# 3. 确认无误后提交
+git add .
+git commit -m "Update courses"
+git push
+```
+
+### 课程创建
+
+1. **标题简洁** - 使用简短、清晰的标题
+2. **描述详细** - 提供足够的课程描述信息
+3. **标签准确** - 使用准确的标签便于搜索
+4. **封面美观** - 使用高质量的封面图片
+5. **内容结构** - 合理组织课程内容结构
+6. **代码示例** - 提供清晰的代码示例
+
+### 部署优化
+
+1. **增量更新** - 只修改需要更新的课程
+2. **监控构建** - 关注 EdgeOne 构建日志
+3. **定期维护** - 定期清理旧的构建缓存
+4. **元数据完整** - 确保填写所有必填字段
+5. **命名规范** - 使用小写字母和连字符（如 `vue-basics`）
 
 ---
-
-## 📖 更多文档
-
-- [课程创建指南](docs/course-guide.md) - 详细的课程创建说明
-- [部署配置指南](docs/deployment-guide.md) - 完整的部署文档
-
----
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
 
 ## 📄 许可证
 
