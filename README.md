@@ -103,9 +103,10 @@ npm run preview
 
 ### 部署到 EdgeOne
 
-推送代码到 GitHub，EdgeOne 会自动拉取、构建和部署。
+推送代码到 Git 仓库，EdgeOne 会自动拉取、构建和部署。
 
-详见 [部署指南](docs/deployment-guide.md)
+- [EdgeOne 配置说明](EDGEONE-CONFIG.md) - 快速配置指南
+- [详细部署指南](docs/deployment-guide.md) - 完整部署文档
 
 ## 📖 文档
 
