@@ -1,0 +1,58 @@
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 构建产物
+dist/
+portal/.vitepress/cache/
+portal/.vitepress/dist/
+
+# 构建缓存
+.buildcache/
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 编辑器配置
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# 环境变量（如果需要）
+.env
+.env.local
+.env.*.local
+
+# 临时文件
+*.tmp
+*.temp
+.temp/
+.cache/
+
+# 测试覆盖率
+coverage/
+*.lcov
+.nyc_output/
+
+# Slidev 临时文件
+.slidev/
