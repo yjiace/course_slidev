@@ -56,3 +56,5 @@ coverage/
 
 # Slidev 临时文件
 .slidev/
+
+.kiro/
