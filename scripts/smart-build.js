@@ -35,6 +35,18 @@ try {
     process.exit(0)
   }
   
+  // 检查是否是首次构建（dist 目录不存在或不完整）
+  const distExists = fs.existsSync('dist/portal')
+  const coursesExist = fs.existsSync('dist/portal/courses')
+  const exportsExist = fs.existsSync('dist/portal/exports')
+  
+  if (!distExists || !coursesExist || !exportsExist) {
+    console.log('📦 检测到首次构建或构建产物不完整')
+    console.log('   执行完整构建\n')
+    execSync('node scripts/build-all.js', { stdio: 'inherit' })
+    process.exit(0)
+  }
+  
   // 分析变更的文件
   const changedFilesList = changedFiles.split('\n').filter(f => f.trim())
   
