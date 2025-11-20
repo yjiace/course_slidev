@@ -27,6 +27,13 @@
 2. **确认工作流文件存在**
    - 检查 `.github/workflows/build-and-deploy.yml` 文件是否存在
    - 确认文件内容正确
+   - 确认包含 `permissions: contents: write` 配置
+
+3. **检查仓库权限设置**
+   - 访问 GitHub 仓库的 Settings → Actions → General
+   - 在 "Workflow permissions" 部分
+   - 确保选择了 "Read and write permissions"
+   - 或者工作流文件中已配置 `permissions: contents: write`
 
 ### 步骤 2: 测试 GitHub Actions 工作流
 
@@ -222,6 +229,30 @@
 - 课程格式错误：修复 slides.md 语法
 - Playwright 版本问题：更新到最新版本
 - 内存不足：优化课程内容或增加资源
+
+### GitHub Actions 权限错误
+
+**问题**：部署步骤失败，提示 "Permission denied" 或 403 错误
+
+**排查步骤**：
+1. 检查工作流文件是否包含权限配置
+2. 检查仓库的 Actions 权限设置
+3. 查看详细错误日志
+
+**解决方案**：
+
+**方法 1：在工作流文件中添加权限**（推荐）
+```yaml
+permissions:
+  contents: write
+```
+
+**方法 2：在仓库设置中启用写入权限**
+1. 访问 GitHub 仓库
+2. Settings → Actions → General
+3. 找到 "Workflow permissions"
+4. 选择 "Read and write permissions"
+5. 保存更改
 
 ### EdgeOne 部署失败
 

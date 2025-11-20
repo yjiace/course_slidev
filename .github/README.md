@@ -75,10 +75,24 @@
 
 **症状**：`Deploy to gh-pages` 步骤失败
 
-**解决方案**：
-- 检查 GITHUB_TOKEN 权限
-- 确认 gh-pages 分支没有保护规则
-- 查看详细错误日志
+**常见原因和解决方案**：
+
+1. **权限不足（403 错误）**
+   - 检查工作流文件是否包含 `permissions: contents: write`
+   - 或访问 Settings → Actions → General
+   - 确保 "Workflow permissions" 设置为 "Read and write permissions"
+
+2. **分支保护规则**
+   - 确认 gh-pages 分支没有保护规则
+   - 或在保护规则中允许 GitHub Actions 推送
+
+3. **Token 问题**
+   - 确认使用的是 `secrets.GITHUB_TOKEN`
+   - 不要使用自定义的 PAT（除非必要）
+
+4. **其他问题**
+   - 查看详细错误日志
+   - 检查网络连接
 
 ## 优化建议
 
