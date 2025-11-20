@@ -323,46 +323,101 @@ layout: center
 
 ---
 
-## 🚀 部署到 EdgeOne
+## 🚀 部署流程
+
+### 架构说明
+
+本项目采用 **GitHub Actions + EdgeOne** 的部署架构：
+
+1. **GitHub Actions** 负责构建（支持 Playwright，可生成 PDF）
+2. **gh-pages 分支** 存储构建产物
+3. **EdgeOne** 从 gh-pages 分支拉取并部署静态文件
+
+这种架构解决了 EdgeOne 不支持 Playwright 依赖的问题，确保 PDF 导出功能正常工作。
+
+### GitHub Actions 配置
+
+项目已配置自动化工作流（`.github/workflows/build-and-deploy.yml`），包含以下特性：
+
+**触发条件**：
+- 推送到 `main` 分支自动触发
+- 支持手动触发（workflow_dispatch）
+
+**智能构建策略**：
+- 只有课程变更 → 增量构建（30-60秒）
+- 门户/脚本变更 → 完整构建（3-5分钟）
+- 自动检测变更类型，选择最优构建策略
+
+**缓存优化**：
+- npm 依赖缓存
+- Playwright 浏览器缓存
+- 大幅减少构建时间
+
+**自动部署**：
+- 构建完成后自动推送到 `gh-pages` 分支
+- EdgeOne 自动检测更新并部署
 
 ### EdgeOne 配置
 
 在 EdgeOne 控制台配置以下参数：
 
-| 配置项 | 值 |
-|--------|-----|
-| **框架预设** | Other（其他） |
-| **Node.js 版本** | 18.x 或更高 |
-| **包管理器** | npm |
-| **构建命令** | `npm run build` |
-| **输出目录** | `dist/portal` |
+| 配置项 | 值 | 说明 |
+|--------|-----|------|
+| **框架预设** | Other（其他） | 不使用预设框架 |
+| **构建命令** | （留空或 `echo "Skip build"`） | 跳过构建，使用预构建文件 |
+| **输出目录** | `.` 或 `/` | 使用根目录 |
+| **部署分支** | `gh-pages` | 从 gh-pages 分支拉取 |
+| **自动部署** | 启用 | 检测到更新自动部署 |
 
 ### 部署流程
 
-1. **推送代码**
+1. **推送代码到 GitHub**
    ```bash
    git add .
    git commit -m "Update courses"
    git push origin main
    ```
 
-2. **自动构建**
-   - EdgeOne 自动拉取代码
-   - 执行 `npm install`
-   - 执行 `npm run build`
+2. **GitHub Actions 自动构建**
+   - 检测变更类型
+   - 安装依赖（包括 Playwright）
+   - 执行智能构建（增量或完整）
+   - 生成 PDF 和 MD 导出文件
+   - 推送构建产物到 gh-pages 分支
 
-3. **自动部署**
-   - 部署 `dist/portal` 目录
-   - 自动刷新 CDN 缓存
+3. **EdgeOne 自动部署**
+   - 检测 gh-pages 分支更新
+   - 拉取预构建的静态文件
+   - 部署到 CDN
+   - 自动刷新缓存
+
+> 📖 **详细部署指南**：查看 [DEPLOYMENT.md](./DEPLOYMENT.md) 了解完整的迁移步骤、故障排除和回滚计划。
 
 ### 构建时间
 
-- **首次构建**：约 1-2 分钟（构建所有课程）
-- **增量构建**：约 30-60 秒（只构建修改的课程）
+| 场景 | 时间 | 说明 |
+|------|------|------|
+| **完整构建** | 3-5 分钟 | 所有课程 + PDF 导出 |
+| **增量构建（1-2门课程）** | 30-60 秒 | 只构建修改的课程 |
+| **增量构建（5-10门课程）** | 1-2 分钟 | 部分课程更新 |
+| **仅门户更新** | < 30 秒 | 无课程变更 |
+
+### 监控构建状态
+
+**查看 GitHub Actions 日志**：
+1. 访问 GitHub 仓库
+2. 点击 "Actions" 标签
+3. 查看最新的工作流运行状态
+4. 点击查看详细日志
+
+**构建状态徽章**（可选）：
+```markdown
+![Build Status](https://github.com/your-username/your-repo/workflows/Build%20and%20Deploy/badge.svg)
+```
 
 ### CDN 缓存配置
 
-推荐的缓存规则：
+推荐的 EdgeOne 缓存规则：
 
 | 路径 | 缓存时间 | 说明 |
 |------|---------|------|
@@ -370,7 +425,65 @@ layout: center
 | `/assets/*.js` | 1 年 | JS 文件（带哈希值） |
 | `/assets/*.css` | 1 年 | CSS 文件（带哈希值） |
 | `/courses/**/*` | 1 天 | 课程内容 |
+| `/exports/**/*` | 1 天 | 导出文件（PDF/MD） |
 | `/images/**/*` | 1 个月 | 图片资源 |
+
+---
+
+## ⚡ 智能构建系统
+
+### 功能特性
+
+项目采用智能构建系统，根据文件变更类型自动选择最优构建策略：
+
+**增量构建**（仅课程变更）：
+- 只构建修改过的课程
+- 复用未修改课程的构建产物
+- 构建时间：30-60 秒（1-2 门课程）
+
+**完整构建**（门户/脚本变更）：
+- 重新构建所有内容
+- 确保系统一致性
+- 构建时间：3-5 分钟
+
+### 工作原理
+
+1. **变更检测**：通过 git diff 检测修改的文件
+2. **策略选择**：
+   - `courses/` 目录变更 → 增量构建
+   - `portal/` 或 `scripts/` 变更 → 完整构建
+   - `package.json` 变更 → 完整构建
+3. **缓存管理**：使用 `.buildcache/` 存储构建缓存
+4. **智能导出**：只为修改的课程重新生成 PDF
+
+### 本地使用
+
+```bash
+# 智能构建（自动检测变更）
+node scripts/smart-build.js
+
+# 强制完整构建
+npm run build
+
+# 增量构建课程
+node scripts/incremental-build.js
+
+# 增量导出文件
+node scripts/incremental-exports.js
+```
+
+### 缓存管理
+
+```bash
+# 查看缓存状态
+cat .buildcache/cache.json
+
+# 清除缓存（强制重新构建）
+rm -rf .buildcache
+
+# Windows 清除缓存
+rmdir /s /q .buildcache
+```
 
 ---
 
@@ -380,8 +493,9 @@ layout: center
 |------|------|
 | `npm start` | 构建并预览完整系统 |
 | `npm run dev` | 开发门户（课程链接会404，下载功能不可用） |
-| `npm run build` | 构建所有内容 |
+| `npm run build` | 完整构建所有内容 |
 | `npm run preview` | 预览构建结果 |
+| `node scripts/smart-build.js` | 智能构建（推荐） |
 | `npx slidev <path>` | 预览单个课程 |
 
 ---
@@ -435,21 +549,39 @@ courseware-system/
 2. 确保图片文件存在
 3. 检查图片格式是否支持（JPG、PNG、SVG）
 
-### Q: EdgeOne 构建失败？
+### Q: GitHub Actions 构建失败？
 
 **A:** 
-1. 检查 Node.js 版本是否为 18+
-2. 检查课程元数据格式是否正确
-3. 查看 EdgeOne 构建日志获取详细错误
+1. 访问 GitHub Actions 页面查看详细日志
+2. 检查是否是 Playwright 安装失败（网络问题）
+3. 检查课程元数据格式是否正确
 4. 本地运行 `npm run build` 测试
+5. 如果是首次运行，可能需要等待 Playwright 下载完成
+
+### Q: PDF 导出失败？
+
+**A:**
+1. 检查 GitHub Actions 日志中的错误信息
+2. 确认 Playwright 已成功安装
+3. 检查课程 slides.md 文件格式是否正确
+4. 本地测试：`npx playwright install chromium` 然后 `npm run build`
 
 ### Q: 部署后课程内容未更新？
 
 **A:** 
-1. 清除浏览器缓存
-2. 在 EdgeOne 控制台刷新 CDN 缓存
-3. 检查是否触发了新的构建
-4. 查看构建日志确认构建成功
+1. 检查 GitHub Actions 是否成功完成
+2. 确认 gh-pages 分支已更新
+3. 清除浏览器缓存
+4. 在 EdgeOne 控制台刷新 CDN 缓存
+5. 等待 1-2 分钟让 EdgeOne 同步更新
+
+### Q: 如何手动触发构建？
+
+**A:**
+1. 访问 GitHub 仓库的 Actions 页面
+2. 选择 "Build and Deploy" 工作流
+3. 点击 "Run workflow" 按钮
+4. 选择 main 分支并确认运行
 
 ### Q: 如何清除构建缓存？
 
@@ -478,10 +610,10 @@ npm run build
 ### 提交前检查
 
 ```bash
-# 1. 本地构建测试
+# 1. 本地构建测试（可选，GitHub Actions 会自动构建）
 npm run build
 
-# 2. 预览构建结果
+# 2. 预览构建结果（可选）
 npm run preview
 
 # 3. 确认无误后提交
@@ -501,11 +633,20 @@ git push
 
 ### 部署优化
 
-1. **增量更新** - 只修改需要更新的课程
-2. **监控构建** - 关注 EdgeOne 构建日志
-3. **定期维护** - 定期清理旧的构建缓存
+1. **增量更新** - 只修改需要更新的课程，智能构建会自动检测
+2. **监控构建** - 关注 GitHub Actions 构建日志
+3. **定期维护** - 定期清理旧的构建缓存（`.buildcache` 目录）
 4. **元数据完整** - 确保填写所有必填字段
 5. **命名规范** - 使用小写字母和连字符（如 `vue-basics`）
+6. **批量更新** - 多个课程修改可以一次性提交，减少构建次数
+
+### GitHub Actions 使用建议
+
+1. **查看构建日志** - 每次推送后检查 Actions 页面确认构建成功
+2. **利用缓存** - 工作流已配置依赖和浏览器缓存，无需额外操作
+3. **手动触发** - 需要重新部署时可以手动触发工作流
+4. **监控额度** - GitHub Actions 免费账户有 2000 分钟/月的额度
+5. **优化构建** - 智能构建策略已自动优化，通常只需 30-60 秒
 
 ---
 
