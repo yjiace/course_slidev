@@ -24,10 +24,11 @@
   "dependencies": {
     "@slidev/cli": "^0.49.0",
     "@slidev/theme-default": "^0.25.0",
-    "vitepress": "^1.0.0",
-    "vue": "^3.4.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "fast-glob": "^3.3.3",
+    "vitepress": "^1.0.0",
+    "vue": "^3.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
