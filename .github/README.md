@@ -14,7 +14,7 @@
 **主要步骤**：
 
 1. **Checkout** - 检出代码（获取最近 2 次提交用于 diff）
-2. **Setup Node.js** - 设置 Node.js 18 环境
+2. **Setup Node.js** - 设置 Node.js 20 环境
 3. **Cache dependencies** - 缓存 npm 依赖
 4. **Install dependencies** - 安装项目依赖
 5. **Cache Playwright** - 缓存 Playwright 浏览器
