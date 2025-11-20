@@ -1,35 +1,50 @@
 <template>
-  <a 
-    :href="course.slideUrl" 
-    target="_blank"
-    rel="noopener noreferrer"
-    class="flex cursor-pointer flex-col gap-3 rounded-xl border border-solid border-transparent bg-card-light p-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-primary/50 dark:bg-card-dark dark:hover:border-primary/50"
-  >
-    <div 
-      class="aspect-video w-full rounded-lg bg-cover bg-center bg-no-repeat"
-      :style="getCoverStyle()"
-      @error="onImageError"
-    ></div>
-    <div class="flex flex-1 flex-col">
-      <p class="text-base font-semibold leading-normal">{{ course.title }}</p>
-      <p class="mt-1 flex-1 text-sm text-slate-600 dark:text-slate-300">{{ course.description }}</p>
-    </div>
-    <div class="mt-2 flex flex-wrap gap-1">
-      <span :class="getCategoryClass()">{{ course.category }}</span>
-      <span 
-        v-for="(tag, index) in course.tags.slice(0, 3)" 
-        :key="tag"
-        :class="getTagClass(index)"
-      >
-        {{ tag }}
-      </span>
-    </div>
-  </a>
+  <div class="course-card-wrapper">
+    <a 
+      :href="course.slideUrl" 
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex cursor-pointer flex-col gap-3 rounded-xl border border-solid border-transparent bg-card-light p-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-primary/50 dark:bg-card-dark dark:hover:border-primary/50"
+    >
+      <!-- 封面图片容器 - 正方形 1:1 比例 -->
+      <div class="cover-image-wrapper relative w-full">
+        <div class="cover-image-inner absolute inset-0 rounded-lg bg-cover bg-center bg-no-repeat"
+          :style="getCoverStyle()"
+          @error="onImageError"
+        >
+          <!-- 下载按钮 - 始终显示在图片右上角 -->
+          <div class="download-button-overlay">
+            <ExportButton
+              :course-id="course.id"
+              :course-path="course.path"
+              :course-title="course.title"
+            />
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex flex-1 flex-col">
+        <p class="text-base font-semibold leading-normal">{{ course.title }}</p>
+        <p class="mt-1 flex-1 text-sm text-slate-600 dark:text-slate-300">{{ course.description }}</p>
+      </div>
+      <div class="mt-2 flex flex-wrap gap-1">
+        <span :class="getCategoryClass()">{{ course.category }}</span>
+        <span 
+          v-for="(tag, index) in course.tags.slice(0, 3)" 
+          :key="tag"
+          :class="getTagClass(index)"
+        >
+          {{ tag }}
+        </span>
+      </div>
+    </a>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Course } from '../../../../scripts/scan-courses'
+import ExportButton from './ExportButton.vue'
 
 const props = defineProps<{
   course: Course
@@ -94,3 +109,35 @@ function onImageError() {
 }
 </script>
 
+
+<style scoped>
+/* 封面图片容器 - 使用 padding-bottom 技巧创建正方形 */
+.cover-image-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  padding-bottom: 100% !important; /* 100% = 1:1 正方形比例 */
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: hidden !important;
+  border-radius: 0.5rem;
+}
+
+.cover-image-inner {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 下载按钮覆盖层 - 始终显示在图片右上角 */
+.download-button-overlay {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  z-index: 10;
+}
+</style>
