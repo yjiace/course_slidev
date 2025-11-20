@@ -2,6 +2,8 @@
 
 基于 VitePress + Slidev 的混合架构课件系统，为软件学院提供现代化的课程门户和演讲课件。
 
+> 🚀 **新用户？** 查看 [快速开始指南](./QUICKSTART.md) 5 分钟快速上手！
+
 ## ✨ 特性
 
 - 📚 **课程门户** - 自动扫描和展示所有课程
@@ -494,8 +496,9 @@ rmdir /s /q .buildcache
 | `npm start` | 构建并预览完整系统 |
 | `npm run dev` | 开发门户（课程链接会404，下载功能不可用） |
 | `npm run build` | 完整构建所有内容 |
+| `npm run build:smart` | 智能构建（推荐，自动检测变更） |
+| `npm run build:test` | 测试构建（推送前验证） |
 | `npm run preview` | 预览构建结果 |
-| `node scripts/smart-build.js` | 智能构建（推荐） |
 | `npx slidev <path>` | 预览单个课程 |
 
 ---
@@ -610,17 +613,19 @@ npm run build
 ### 提交前检查
 
 ```bash
-# 1. 本地构建测试（可选，GitHub Actions 会自动构建）
-npm run build
+# 推荐：使用测试构建验证（模拟 GitHub Actions）
+npm run build:test
 
-# 2. 预览构建结果（可选）
-npm run preview
+# 或者：快速智能构建
+npm run build:smart
 
-# 3. 确认无误后提交
+# 确认无误后提交
 git add .
 git commit -m "Update courses"
-git push
+git push origin main
 ```
+
+**提示**：`npm run build:test` 会模拟 GitHub Actions 的完整构建流程，包括 Playwright 检查和构建产物验证，推荐在首次推送或重大更改前使用。
 
 ### 课程创建
 

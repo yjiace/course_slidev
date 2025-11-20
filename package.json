@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vitepress dev portal --port 5173",
     "build": "node scripts/build-all.js",
+    "build:smart": "node scripts/smart-build.js",
     "build:exports": "node scripts/build-exports.js",
+    "build:test": "node scripts/test-build.js",
     "verify:exports": "node scripts/verify-exports.js",
     "preview": "vitepress preview portal",
     "start": "npm run build && npm run preview"
