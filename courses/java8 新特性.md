@@ -127,7 +127,7 @@ System.out.println(result); // 输出10000
 
 ## 3、常用内置函数式接口
 
-### 3.1 消费型接口 Consumer<T>
+### 3.1 消费型接口 `Consumer<T>`
 
 ```java
 @FunctionalInterface
@@ -144,7 +144,7 @@ con.accept("Hello Consumer");
 
 ===
 
-### 3.2 供给型接口 Supplier<T>
+### 3.2 供给型接口 `Supplier<T>`
 
 ```java
 @FunctionalInterface
@@ -162,7 +162,7 @@ System.out.println(str);
 
 ===
 
-### 3.3 函数型接口 Function<T, R>
+### 3.3 函数型接口 `Function<T, R>`
 
 ```java
 @FunctionalInterface
@@ -180,7 +180,7 @@ System.out.println(length);
 
 ===
 
-### 3.4 断言型接口 Predicate<T>
+### 3.4 断言型接口 `Predicate<T>`
 
 ```java
 @FunctionalInterface
