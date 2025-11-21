@@ -117,9 +117,12 @@ async function incrementalBuild(options = {}) {
     // 逐个处理课程
     for (const course of courses) {
       const courseFile = course.path
-      const courseDir = path.dirname(courseFile)
-      const relativePath = path.relative(coursesDir, courseDir)
-      const outputDir = path.join('dist', 'portal', 'courses', relativePath)
+
+      // 计算输出目录
+      // course.slideUrl 例如: /courses/backend/Java基础/
+      // 我们需要将其转换为: dist/portal/courses/backend/Java基础
+      const urlPath = course.slideUrl.replace(/^\//, '') // 移除开头的 /
+      const outputDir = path.join('dist', 'portal', urlPath)
 
       // 检查是否需要构建
       const needsBuild = force || isCourseChanged(courseFile, cache)
@@ -142,7 +145,7 @@ async function incrementalBuild(options = {}) {
       try {
         // 构建课程
         execSync(
-          `npx slidev build "${path.join(courseDir, 'slides.md')}" --base "/courses/${relativePath.replace(/\\/g, '/')}/" --out "${path.resolve(outputDir)}"`,
+          `npx slidev build "${courseFile}" --base "${course.slideUrl}" --out "${path.resolve(outputDir)}"`,
           {
             stdio: verbose ? 'inherit' : 'pipe',
             cwd: process.cwd()
