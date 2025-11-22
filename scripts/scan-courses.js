@@ -191,7 +191,9 @@ export async function scanCourses(options = {}) {
         date: meta.date,
         level: meta.level,
         duration: meta.duration,
-        cover: meta.cover,
+
+        cover: meta.cover || meta.background,
+        coverImage: meta.cover || meta.background,
         path: path.relative(process.cwd(), filePath).replace(/\\/g, '/'), // 统一为 POSIX 路径
         slideUrl,
         meta

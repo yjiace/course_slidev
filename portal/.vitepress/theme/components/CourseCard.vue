@@ -96,7 +96,11 @@ function getCoverStyle() {
     '人工智能': 'https://lh3.googleusercontent.com/aida-public/AB6AXuD4TnhrrWQ7z6SsV70vOVYk_5yS5jilZ2whlhXilx7Hy1ayM2q4kfpZo4EEMY3tqg8CtblKO11cFZzZn1jb665W-mbmZtq2Jjtd4xV5nD2xfrB3fb0yu91X0oJvpn42ylUiCsPaQKL-a6RJtm1E71TbjZThPsZUuXtjslfo6Pue-6KlMIwOlwqh0SEz8fKb7Y1SGQa2wM8TBXxlioQivFa_ZzJKVzysSE2SZ7wErGEfFnM_ZynLVbkPdSXBa6DSm5n6iMZBdbI8Q5c',
   }
   
-  const imageUrl = props.course.coverImage || defaultImages[props.course.category] || defaultImages['计算机基础']
+  const imageUrl = props.course.coverImage || 
+                   props.course.cover || 
+                   props.course.meta?.background || 
+                   defaultImages[props.course.category] || 
+                   defaultImages['计算机基础']
   
   return {
     backgroundImage: `url("${imageUrl}")`,

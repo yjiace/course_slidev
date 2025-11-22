@@ -23,7 +23,9 @@
   "license": "MIT",
   "dependencies": {
     "@slidev/cli": "^0.49.0",
+    "@slidev/theme-apple-basic": "^0.25.1",
     "@slidev/theme-default": "^0.25.0",
+    "@slidev/theme-seriph": "^0.25.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "fast-glob": "^3.3.3",
