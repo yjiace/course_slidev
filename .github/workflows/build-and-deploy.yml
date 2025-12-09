@@ -60,6 +60,19 @@ jobs:
           echo "Build output verified"
           ls -la dist/portal
       
+      - name: Create Cloudflare wrangler config
+        run: |
+          cat > dist/portal/wrangler.jsonc << 'EOF'
+          {
+            "name": "course-slidev",
+            "compatibility_date": "2025-12-09",
+            "assets": {
+              "directory": "./"
+            }
+          }
+          EOF
+          echo "✅ Cloudflare wrangler.jsonc created"
+      
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
