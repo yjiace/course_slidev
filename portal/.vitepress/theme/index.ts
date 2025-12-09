@@ -10,15 +10,30 @@ import CustomHeader from './components/CustomHeader.vue'
 import CourseCard from './components/CourseCard.vue'
 import CategoryNav from './components/CategoryNav.vue'
 
+// 文档相关组件
+import DocsPage from './components/DocsPage.vue'
+import DocCard from './components/DocCard.vue'
+import DocCategoryNav from './components/DocCategoryNav.vue'
+import DocDetailPage from './components/DocDetailPage.vue'
+import CoursesPage from './components/CoursesPage.vue'
+
 export default {
   extends: DefaultTheme,
   Layout,
-  
+
   enhanceApp({ app, router, siteData }) {
-    // 注册全局组件
+    // 注册全局组件 - 课程
     app.component('HomePage', HomePage)
     app.component('CustomHeader', CustomHeader)
     app.component('CourseCard', CourseCard)
     app.component('CategoryNav', CategoryNav)
+
+    // 注册全局组件 - 文档
+    app.component('DocsPage', DocsPage)
+    app.component('DocCard', DocCard)
+    app.component('DocCategoryNav', DocCategoryNav)
+    app.component('DocDetailPage', DocDetailPage)
+    app.component('CoursesPage', CoursesPage)
   }
 } satisfies Theme
+

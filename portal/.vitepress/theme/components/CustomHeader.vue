@@ -1,8 +1,21 @@
 <template>
   <header class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-solid border-border-light dark:border-border-dark bg-card-light/80 dark:bg-card-dark/80 px-6 backdrop-blur-sm">
-    <div class="flex items-center gap-4">
-      <span class="material-symbols-outlined text-primary text-3xl">school</span>
-      <h1 class="text-xl font-bold tracking-tight">软件学院课程</h1>
+    <div class="flex items-center gap-6">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <span class="material-symbols-outlined text-primary text-3xl">school</span>
+        <h1 class="text-xl font-bold tracking-tight">软件学院</h1>
+      </a>
+      
+      <!-- 导航菜单 -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="/" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          文档
+        </a>
+        <a href="/courses" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          课程
+        </a>
+      </nav>
     </div>
     <div class="flex flex-1 justify-end gap-4">
       <div class="relative flex w-full max-w-sm items-center">
@@ -13,7 +26,7 @@
           v-model="searchQuery"
           :style="{ backgroundColor: isDark ? '#1f2937' : '#ffffff' }"
           class="h-10 w-full rounded-lg border border-gray-300 dark:border-gray-600 pl-10 pr-4 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
-          placeholder="搜索课程名称或教师" 
+          placeholder="搜索课程或文档" 
           type="text"
           @input="onSearchInput"
         />

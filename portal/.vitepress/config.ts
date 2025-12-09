@@ -10,10 +10,10 @@ export default defineConfig({
 
   // 基础路径配置
   base: '/',
-  
+
   // 输出目录
   outDir: '../dist/portal',
-  
+
   // 缓存目录
   cacheDir: '.vitepress/cache',
 
@@ -25,43 +25,45 @@ export default defineConfig({
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     // Google Fonts - Inter
-    ['link', { 
-      rel: 'stylesheet', 
-      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap' 
+    ['link', {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
     }],
     // Material Symbols Outlined
-    ['link', { 
-      rel: 'stylesheet', 
-      href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined' 
+    ['link', {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined'
     }],
     // Tailwind 配置
     ['script', {}, `
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#137fec",
-              "background-light": "#f6f7f8",
-              "background-dark": "#101922",
-              "text-light": "#0d141b",
-              "text-dark": "#e0e0e0",
-              "card-light": "#ffffff",
-              "card-dark": "#1a2530",
-              "border-light": "#e7edf3",
-              "border-dark": "#2c3a47",
-            },
-            fontFamily: {
-              "display": ["Inter", "sans-serif"]
-            },
-            borderRadius: {
-              "DEFAULT": "0.25rem",
-              "lg": "0.5rem",
-              "xl": "0.75rem",
-              "full": "9999px"
+      if (typeof tailwind !== 'undefined') {
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#137fec",
+                "background-light": "#f6f7f8",
+                "background-dark": "#101922",
+                "text-light": "#0d141b",
+                "text-dark": "#e0e0e0",
+                "card-light": "#ffffff",
+                "card-dark": "#1a2530",
+                "border-light": "#e7edf3",
+                "border-dark": "#2c3a47",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"]
+              },
+              borderRadius: {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
             },
           },
-        },
+        }
       }
     `]
   ],
@@ -71,11 +73,23 @@ export default defineConfig({
     // 导航栏
     nav: [
       { text: '首页', link: '/' },
-      { text: '所有课程', link: '/' }
+      { text: '课程演示', link: '/courses' },
+      { text: '技术文档', link: '/docs' }
     ],
 
-    // 侧边栏
-    sidebar: [],
+    // 侧边栏 - 由 copy-docs.js 自动生成
+    // 文件: portal/.vitepress/sidebar.generated.ts
+    sidebar: (() => {
+      try {
+        // 动态导入自动生成的侧边栏配置
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { docsSidebar } = require('./sidebar.generated')
+        return { '/docs/': docsSidebar }
+      } catch {
+        // 如果配置文件不存在，返回空配置
+        return { '/docs/': [] }
+      }
+    })(),
 
     // 社交链接
     socialLinks: [],

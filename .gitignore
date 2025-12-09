@@ -10,6 +10,12 @@ portal/.vitepress/dist/
 # 构建缓存
 .buildcache/
 
+# 构建时自动生成的文档目录
+portal/docs/
+
+# 自动生成的侧边栏配置
+portal/.vitepress/sidebar.generated.ts
+
 # 日志文件
 *.log
 npm-debug.log*
