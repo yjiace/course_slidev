@@ -2,9 +2,9 @@
   <header class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-solid border-border-light dark:border-border-dark bg-card-light/80 dark:bg-card-dark/80 px-6 backdrop-blur-sm">
     <div class="flex items-center gap-6">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-        <span class="material-symbols-outlined text-primary text-3xl">school</span>
-        <h1 class="text-xl font-bold tracking-tight">软件学院</h1>
+      <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <img src="/logo.png" alt="SmallYoung Logo" class="h-10 w-10 rounded-lg object-cover" />
+        <h1 class="text-xl font-bold tracking-tight">SmallYoung</h1>
       </a>
       
       <!-- 导航菜单 -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+  <div class="flex flex-col bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
     <CustomHeader @search="onSearch" />
     
     <!-- 开发模式提示 -->
@@ -17,8 +17,8 @@
       <main class="w-full max-w-2xl p-6 lg:p-8">
         <!-- 标题 -->
         <div class="text-center mb-12">
-          <h1 class="text-4xl lg:text-5xl font-black leading-tight tracking-tighter mb-4">软件学院学习平台</h1>
-          <p class="text-lg text-text-light/70 dark:text-text-dark/70">选择您要浏览的内容</p>
+          <h1 class="text-4xl lg:text-5xl font-black leading-tight tracking-tighter mb-4">SmallYoung</h1>
+          <p class="text-lg text-text-light/70 dark:text-text-dark/70">现代化课程学习平台</p>
         </div>
         
         <!-- 菜单列表 -->

@@ -1,5 +1,5 @@
 ---
 layout: docs
-title: 软件学院课程门户
+title: SmallYoung 课程门户
 ---
 

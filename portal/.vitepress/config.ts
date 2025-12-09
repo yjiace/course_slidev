@@ -4,8 +4,8 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   // 站点基础信息
-  title: '软件学院课程门户',
-  description: '现代化课件系统 - 课程导航与学习平台',
+  title: 'SmallYoung 课程门户',
+  description: 'SmallYoung 现代化课件系统 - 课程导航与学习平台',
   lang: 'zh-CN',
 
   // 基础路径配置
@@ -19,6 +19,8 @@ export default defineConfig({
 
   // Head 配置 - 添加外部资源
   head: [
+    // Favicon
+    ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
     // Tailwind CSS CDN
     ['script', { src: 'https://cdn.tailwindcss.com?plugins=forms,container-queries' }],
     // Google Fonts - Preconnect
@@ -96,8 +98,8 @@ export default defineConfig({
 
     // 页脚
     footer: {
-      message: '软件学院现代化课件系统',
-      copyright: 'Copyright © 2024'
+      message: 'SmallYoung 现代化课件系统',
+      copyright: 'Copyright © 2024 SmallYoung'
     },
 
     // 搜索

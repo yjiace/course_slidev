@@ -1,9 +1,34 @@
 <template>
-  <HomePage v-if="frontmatter.layout === 'home'" />
-  <CoursesPage v-else-if="frontmatter.layout === 'courses'" />
-  <DocsPage v-else-if="frontmatter.layout === 'docs'" />
-  <DocDetailPage v-else-if="frontmatter.layout === 'doc-detail'" :doc="currentDoc" />
-  <DefaultTheme.Layout v-else />
+  <!-- 首页布局 -->
+  <div v-if="frontmatter.layout === 'home'" class="min-h-screen flex flex-col">
+    <HomePage class="flex-1" />
+    <GlobalFooter />
+  </div>
+  
+  <!-- 课程列表页布局 -->
+  <div v-else-if="frontmatter.layout === 'courses'" class="min-h-screen flex flex-col">
+    <CoursesPage class="flex-1" />
+    <GlobalFooter />
+  </div>
+  
+  <!-- 文档列表页布局 -->
+  <div v-else-if="frontmatter.layout === 'docs'" class="min-h-screen flex flex-col">
+    <DocsPage class="flex-1" />
+    <GlobalFooter />
+  </div>
+  
+  <!-- 文档详情页布局 -->
+  <div v-else-if="frontmatter.layout === 'doc-detail'" class="min-h-screen flex flex-col">
+    <DocDetailPage class="flex-1" :doc="currentDoc" />
+    <GlobalFooter />
+  </div>
+  
+  <!-- 默认 VitePress 布局 -->
+  <DefaultTheme.Layout v-else>
+    <template #doc-footer-before>
+      <GlobalFooter />
+    </template>
+  </DefaultTheme.Layout>
 </template>
 
 <script setup lang="ts">
@@ -14,6 +39,7 @@ import HomePage from './components/HomePage.vue'
 import CoursesPage from './components/CoursesPage.vue'
 import DocsPage from './components/DocsPage.vue'
 import DocDetailPage from './components/DocDetailPage.vue'
+import GlobalFooter from './components/GlobalFooter.vue'
 import { data as docsData } from '../data/docs.data'
 
 const { frontmatter } = useData()
@@ -31,4 +57,3 @@ const currentDoc = computed(() => {
   return null
 })
 </script>
-

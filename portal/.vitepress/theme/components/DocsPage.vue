@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+  <div class="flex flex-col bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
     <CustomHeader @search="onSearch" />
     
     <!-- 开发模式提示 -->
@@ -30,12 +30,69 @@
           
           <div v-if="docsData && docsData.docs && docsData.docs.length > 0">
             <!-- 文档列表 -->
-            <div v-if="filteredDocs.length > 0" class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">
-              <DocCard 
-                v-for="doc in filteredDocs"
-                :key="doc.id"
-                :doc="doc"
-              />
+            <div v-if="filteredDocs.length > 0">
+              <div class="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">
+                <DocCard 
+                  v-for="doc in paginatedDocs"
+                  :key="doc.id"
+                  :doc="doc"
+                />
+              </div>
+              
+              <!-- 分页 -->
+              <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 mt-8">
+                <button 
+                  @click="currentPage = 1" 
+                  :disabled="currentPage === 1"
+                  class="px-3 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span class="material-symbols-outlined text-sm">first_page</span>
+                </button>
+                <button 
+                  @click="currentPage--" 
+                  :disabled="currentPage === 1"
+                  class="px-3 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span class="material-symbols-outlined text-sm">chevron_left</span>
+                </button>
+                
+                <div class="flex items-center gap-1">
+                  <template v-for="page in displayedPages" :key="page">
+                    <button 
+                      v-if="page !== '...'"
+                      @click="currentPage = page as number"
+                      :class="[
+                        'px-4 py-2 rounded-lg border transition-colors',
+                        currentPage === page 
+                          ? 'bg-primary text-white border-primary' 
+                          : 'border-border-light dark:border-border-dark hover:bg-gray-100 dark:hover:bg-gray-800'
+                      ]"
+                    >
+                      {{ page }}
+                    </button>
+                    <span v-else class="px-2 text-text-light/50 dark:text-text-dark/50">...</span>
+                  </template>
+                </div>
+                
+                <button 
+                  @click="currentPage++" 
+                  :disabled="currentPage === totalPages"
+                  class="px-3 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </button>
+                <button 
+                  @click="currentPage = totalPages" 
+                  :disabled="currentPage === totalPages"
+                  class="px-3 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span class="material-symbols-outlined text-sm">last_page</span>
+                </button>
+                
+                <span class="ml-4 text-sm text-text-light/60 dark:text-text-dark/60">
+                  共 {{ filteredDocs.length }} 篇文档
+                </span>
+              </div>
             </div>
             
             <!-- 无结果提示 -->
@@ -47,9 +104,10 @@
           </div>
           
           <!-- 空状态 -->
-          <div v-else class="text-center py-16">
-            <div class="text-8xl mb-4 opacity-50">📄</div>
-            <p class="text-xl font-semibold text-text-light/70 dark:text-text-dark/70 mb-2">暂无文档</p>
+          <div v-else class="flex flex-col items-center justify-center py-20">
+            <div class="text-8xl mb-6 opacity-50">📄</div>
+            <p class="text-2xl font-semibold text-text-light/70 dark:text-text-dark/70 mb-2">暂无文档</p>
+            <p class="text-text-light/50 dark:text-text-dark/50">文档正在撰写中，敬请期待</p>
           </div>
         </div>
       </main>
@@ -58,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { data as docsData } from '../../data/docs.data'
 import CustomHeader from './CustomHeader.vue'
 import DocCard from './DocCard.vue'
@@ -67,6 +125,8 @@ import DocCategoryNav from './DocCategoryNav.vue'
 // 状态管理
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
+const currentPage = ref(1)
+const pageSize = 12 // 每页显示数量
 
 // 检测是否为开发模式
 const isDevMode = import.meta.env.DEV
@@ -97,6 +157,50 @@ const filteredDocs = computed(() => {
   return docs
 })
 
+// 总页数
+const totalPages = computed(() => Math.ceil(filteredDocs.value.length / pageSize))
+
+// 当前页数据
+const paginatedDocs = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return filteredDocs.value.slice(start, end)
+})
+
+// 显示的页码
+const displayedPages = computed(() => {
+  const pages: (number | string)[] = []
+  const total = totalPages.value
+  const current = currentPage.value
+  
+  if (total <= 7) {
+    for (let i = 1; i <= total; i++) pages.push(i)
+  } else {
+    if (current <= 4) {
+      for (let i = 1; i <= 5; i++) pages.push(i)
+      pages.push('...')
+      pages.push(total)
+    } else if (current >= total - 3) {
+      pages.push(1)
+      pages.push('...')
+      for (let i = total - 4; i <= total; i++) pages.push(i)
+    } else {
+      pages.push(1)
+      pages.push('...')
+      for (let i = current - 1; i <= current + 1; i++) pages.push(i)
+      pages.push('...')
+      pages.push(total)
+    }
+  }
+  
+  return pages
+})
+
+// 筛选条件变化时重置页码
+watch([selectedCategory, searchQuery], () => {
+  currentPage.value = 1
+})
+
 // 事件处理
 function onCategoryChange(category: string | null) {
   selectedCategory.value = category
@@ -104,9 +208,5 @@ function onCategoryChange(category: string | null) {
 
 function onSearch(query: string) {
   searchQuery.value = query
-}
-
-function reloadPage() {
-  window.location.reload()
 }
 </script>
