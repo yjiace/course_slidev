@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CategoryInfo } from '../../../../scripts/generate-docs-index'
+import type { CategoryInfo } from '../../data/docs.data'
 
 defineProps<{
   categories: CategoryInfo[]

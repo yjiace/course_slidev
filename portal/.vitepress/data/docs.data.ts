@@ -17,12 +17,18 @@ interface Doc {
     meta: Record<string, unknown>
 }
 
+// 分类信息类型
+export interface CategoryInfo {
+    name: string
+    count: number
+}
+
 // 文档索引类型
 export interface DocIndex {
     version: string
     generated: string
     docs: Doc[]
-    categories: string[]
+    categories: CategoryInfo[]
     tags: string[]
     stats: {
         totalDocs: number
@@ -33,7 +39,13 @@ export interface DocIndex {
 
 // 生成文档索引
 function generateDocsIndex(docs: Doc[]): DocIndex {
-    const categories = [...new Set(docs.map(d => d.category))]
+    // 统计每个分类的文档数量
+    const categoryMap = new Map<string, number>()
+    docs.forEach(d => {
+        categoryMap.set(d.category, (categoryMap.get(d.category) || 0) + 1)
+    })
+    const categories: CategoryInfo[] = Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }))
+
     const tags = [...new Set(docs.flatMap(d => d.tags))]
 
     return {

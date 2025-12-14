@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { CategoryInfo } from '../../../../scripts/generate-index'
+import type { CategoryInfo } from '../../data/courses.data'
 
 const props = defineProps<{
   categories: CategoryInfo[]

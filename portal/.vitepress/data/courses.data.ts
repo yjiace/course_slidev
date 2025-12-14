@@ -19,12 +19,18 @@ interface Course {
   meta: Record<string, unknown>
 }
 
+// 分类信息类型
+export interface CategoryInfo {
+  name: string
+  count: number
+}
+
 // 课程索引类型
 export interface CourseIndex {
   version: string
   generated: string
   courses: Course[]
-  categories: string[]
+  categories: CategoryInfo[]
   tags: string[]
   stats: {
     totalCourses: number
@@ -35,9 +41,15 @@ export interface CourseIndex {
 
 // 生成课程索引
 function generateIndex(courses: Course[]): CourseIndex {
-  const categories = [...new Set(courses.map(c => c.category))]
+  // 统计每个分类的课程数量
+  const categoryMap = new Map<string, number>()
+  courses.forEach(c => {
+    categoryMap.set(c.category, (categoryMap.get(c.category) || 0) + 1)
+  })
+  const categories: CategoryInfo[] = Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }))
+
   const tags = [...new Set(courses.flatMap(c => c.tags))]
-  
+
   return {
     version: '1.0.0',
     generated: new Date().toISOString(),
@@ -61,7 +73,7 @@ export { data }
 export default {
   // 监听课程目录的变化
   watch: ['../../../courses/**/*.md'],
-  
+
   async load(): Promise<CourseIndex> {
     try {
       // 扫描课程目录
@@ -70,14 +82,14 @@ export default {
         baseDir: coursesDir,
         exclude: ['node_modules', 'dist', '.git', '.buildcache']
       })
-      
+
       // 生成索引
       const index = generateIndex(courses)
-      
+
       return index
     } catch (error) {
       console.error('加载课程数据失败:', error)
-      
+
       // 返回空索引
       return {
         version: '1.0.0',
