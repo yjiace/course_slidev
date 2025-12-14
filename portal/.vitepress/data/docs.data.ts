@@ -1,6 +1,54 @@
 import path from 'path'
-import { scanDocs } from '../../../scripts/scan-docs'
-import { generateDocsIndex, type DocIndex } from '../../../scripts/generate-docs-index'
+import { scanDocs } from '../../../scripts/scan-docs.js'
+
+// 文档类型定义
+interface Doc {
+    id: string
+    title: string
+    category: string
+    tags: string[]
+    description: string
+    author: string
+    date: string
+    cover?: string
+    path: string
+    docUrl: string
+    toc: Array<{ level: number; text: string; slug: string }>
+    meta: Record<string, unknown>
+}
+
+// 文档索引类型
+export interface DocIndex {
+    version: string
+    generated: string
+    docs: Doc[]
+    categories: string[]
+    tags: string[]
+    stats: {
+        totalDocs: number
+        totalCategories: number
+        totalTags: number
+    }
+}
+
+// 生成文档索引
+function generateDocsIndex(docs: Doc[]): DocIndex {
+    const categories = [...new Set(docs.map(d => d.category))]
+    const tags = [...new Set(docs.flatMap(d => d.tags))]
+
+    return {
+        version: '1.0.0',
+        generated: new Date().toISOString(),
+        docs,
+        categories,
+        tags,
+        stats: {
+            totalDocs: docs.length,
+            totalCategories: categories.length,
+            totalTags: tags.length
+        }
+    }
+}
 
 // 声明数据类型
 declare const data: DocIndex

@@ -1,7 +1,56 @@
-import { createContentLoader } from 'vitepress'
 import path from 'path'
 import { scanCourses } from '../../../scripts/scan-courses.js'
-import { generateIndex, type CourseIndex } from '../../../scripts/generate-index.js'
+
+// 课程类型定义
+interface Course {
+  id: string
+  title: string
+  category: string
+  tags: string[]
+  description: string
+  author: string
+  date: string
+  level: string
+  duration?: string
+  cover?: string
+  coverImage?: string
+  path: string
+  slideUrl: string
+  meta: Record<string, unknown>
+}
+
+// 课程索引类型
+export interface CourseIndex {
+  version: string
+  generated: string
+  courses: Course[]
+  categories: string[]
+  tags: string[]
+  stats: {
+    totalCourses: number
+    totalCategories: number
+    totalTags: number
+  }
+}
+
+// 生成课程索引
+function generateIndex(courses: Course[]): CourseIndex {
+  const categories = [...new Set(courses.map(c => c.category))]
+  const tags = [...new Set(courses.flatMap(c => c.tags))]
+  
+  return {
+    version: '1.0.0',
+    generated: new Date().toISOString(),
+    courses,
+    categories,
+    tags,
+    stats: {
+      totalCourses: courses.length,
+      totalCategories: categories.length,
+      totalTags: tags.length
+    }
+  }
+}
 
 // 声明数据类型
 declare const data: CourseIndex
