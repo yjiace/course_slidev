@@ -8,6 +8,8 @@ date: 2025-12-14
 cover: https://cf-img.smallyoung.cn/file/1765677003239_gsw.png
 ---
 
+![AI记忆革命：GSW vs.传统 RAG](https://cf-img.smallyoung.cn/file/1765710271934_unnamed.png)
+
 ## 写在前面
 
 你有没有想过，为什么 AI 在回答问题时，有时候会"丢三落四"？明明文档里有完整的故事线，AI 却只能抓住零散的片段？
