@@ -36,37 +36,41 @@ export default defineConfig({
       rel: 'stylesheet',
       href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined'
     }],
-    // Tailwind 配置
+    // Tailwind 配置 - 使用轮询确保 tailwind 加载完成
     ['script', {}, `
-      if (typeof tailwind !== 'undefined') {
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "primary": "#137fec",
-                "background-light": "#f6f7f8",
-                "background-dark": "#101922",
-                "text-light": "#0d141b",
-                "text-dark": "#e0e0e0",
-                "card-light": "#ffffff",
-                "card-dark": "#1a2530",
-                "border-light": "#e7edf3",
-                "border-dark": "#2c3a47",
-              },
-              fontFamily: {
-                "display": ["Inter", "sans-serif"]
-              },
-              borderRadius: {
-                "DEFAULT": "0.25rem",
-                "lg": "0.5rem",
-                "xl": "0.75rem",
-                "full": "9999px"
+      (function initTailwind() {
+        if (typeof tailwind !== 'undefined') {
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "primary": "#137fec",
+                  "background-light": "#f6f7f8",
+                  "background-dark": "#101922",
+                  "text-light": "#0d141b",
+                  "text-dark": "#e0e0e0",
+                  "card-light": "#ffffff",
+                  "card-dark": "#1a2530",
+                  "border-light": "#e7edf3",
+                  "border-dark": "#2c3a47",
+                },
+                fontFamily: {
+                  "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+                },
               },
             },
-          },
+          }
+        } else {
+          setTimeout(initTailwind, 10)
         }
-      }
+      })()
     `]
   ],
 

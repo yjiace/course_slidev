@@ -2,16 +2,6 @@
   <div class="flex flex-col bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
     <CustomHeader @search="onSearch" />
     
-    <!-- 开发模式提示 -->
-    <div v-if="isDevMode" class="bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800 px-6 py-3">
-      <div class="mx-auto max-w-7xl flex items-center gap-3">
-        <span class="text-yellow-600 dark:text-yellow-400">⚠️</span>
-        <p class="text-sm text-yellow-800 dark:text-yellow-200">
-          <strong>开发模式：</strong>课程链接可能无法访问。请运行 <code class="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-900/40 rounded">npm start</code> 查看完整系统。
-        </p>
-      </div>
-    </div>
-    
     <div class="flex flex-1">
       <main class="w-full flex-1 p-6 lg:p-8">
         <div class="mx-auto max-w-7xl">
@@ -126,9 +116,6 @@ const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
 const currentPage = ref(1)
 const pageSize = 12 // 每页显示数量
-
-// 检测是否为开发模式
-const isDevMode = import.meta.env.DEV
 
 // 过滤后的课程列表
 const filteredCourses = computed(() => {

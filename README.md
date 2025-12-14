@@ -18,10 +18,10 @@
 # 安装依赖
 npm install
 
-# 开发模式（仅门户，课程/文档链接会 404）
+# 门户/文档开发（热更新）
 npm run dev
 
-# 完整构建和预览（推荐）
+# 构建并预览
 npm start
 ```
 
@@ -249,27 +249,84 @@ sidebar: {
 
 ---
 
-## 🔧 常用命令
+## 🔧 开发命令
+
+### 📄 门户/文档开发
+
+```bash
+npm run dev
+```
+
+| 特性 | 说明 |
+|------|------|
+| **适用场景** | 开发首页、文档列表、文档详情页面 |
+| **访问地址** | http://localhost:5173 |
+| **热更新** | ✅ 修改 `docs/` 或 `portal/` 后自动刷新 |
+
+### 📚 课程开发
+
+```bash
+npx slidev courses/分类/课程目录/slides.md
+```
+
+| 特性 | 说明 |
+|------|------|
+| **适用场景** | 编写 Slidev 幻灯片课程 |
+| **访问地址** | http://localhost:3030 |
+| **热更新** | ✅ 实时刷新 |
+
+**示例**：
+```bash
+npx slidev courses/frontend/vue-basics/slides.md
+```
+
+---
+
+## 🚀 构建部署
+
+### 构建命令
 
 | 命令 | 说明 |
 |------|------|
-| `npm run dev` | 开发门户（课程/文档链接会 404） |
-| `npm start` | 完整构建并预览 |
-| `npm run build` | 完整构建 |
-| `npm run build:smart` | 智能增量构建 |
-| `npm run build:test` | 测试构建（推送前验证） |
-| `npx slidev <path>` | 预览单个课程 |
+| `npm run build` | 增量构建（仅构建变更的课程） |
+| `npm run build:all` | 完整构建（重新构建所有内容） |
+| `npm run start` | 增量构建 + 本地预览 |
 
-## ⚡ 构建流程
+### 部署上线
 
-运行 `npm start` 时的构建流程：
+```bash
+git add .
+git commit -m "更新内容"
+git push origin main
+```
+
+推送后自动触发 GitHub Actions 构建，部署到 EdgeOne。
+
+---
+
+## ⚡ 命令速查表
+
+| 我想要... | 使用命令 |
+|-----------|----------|
+| 📄 开发门户/文档 | `npm run dev` |
+| 📚 开发课程幻灯片 | `npx slidev courses/.../slides.md` |
+| 🔨 增量构建 | `npm run build` |
+| 🔨 完整构建 | `npm run build:all` |
+| 👀 构建并预览 | `npm run start` |
+| 🚀 部署上线 | `git push origin main` |
+
+---
+
+## 📦 构建流程
+
+运行 `npm run build` 或 `npm run start` 时的构建流程：
 
 ```
 1. 复制文档      docs/ → portal/docs/
 2. 构建门户      VitePress 构建
 3. 构建课程      Slidev 增量构建
 4. 生成导出      PDF 和 Markdown 导出
-5. 启动预览      http://localhost:4173
+5. 启动预览      http://localhost:4173 (仅 npm start)
 ```
 
 ## 📦 部署流程
