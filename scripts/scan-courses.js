@@ -126,12 +126,16 @@ function generateSlideUrl(filePath, baseDir) {
 /**
  * 扫描课程目录
  * @param {Object} options - 扫描选项
+ * @param {string} options.baseDir - 基础目录
+ * @param {string[]} options.exclude - 排除模式
+ * @param {boolean} options.slidesOnly - 是否只扫描 slides.md 文件
  * @returns {Promise<Array>} 课程列表
  */
 export async function scanCourses(options = {}) {
   const {
     baseDir = 'courses',
-    exclude = []
+    exclude = [],
+    slidesOnly = false
   } = options
 
   const absoluteBaseDir = path.resolve(process.cwd(), baseDir)
@@ -151,15 +155,15 @@ export async function scanCourses(options = {}) {
   console.log(`[信息] 忽略模式: ${allIgnorePatterns.join(', ')}`)
 
   try {
-    // 使用 fast-glob 扫描所有 .md 文件
-    // cwd 设置为 absoluteBaseDir，这样返回的路径是相对路径，方便处理
-    // absolute: true 让它返回绝对路径，方便后续读取
-    const mdFiles = await fg(['**/*.md'], {
+    // 使用 fast-glob 扫描 .md 文件
+    // slidesOnly 模式只扫描 slides.md 文件
+    const pattern = slidesOnly ? '**/slides.md' : '**/*.md'
+    const mdFiles = await fg([pattern], {
       cwd: absoluteBaseDir,
       ignore: allIgnorePatterns,
       absolute: true,
       onlyFiles: true,
-      caseSensitiveMatch: false // Windows 上通常不区分大小写，但保持一致性
+      caseSensitiveMatch: false
     })
 
     console.log(`[信息] 找到 ${mdFiles.length} 个 Markdown 文件`)

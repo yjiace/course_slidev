@@ -20,7 +20,7 @@ try {
 
   // 3. 生成导出文件
   console.log('📦 步骤 3/3: 生成课程导出文件...')
-  execSync('node scripts/build-exports.js', { stdio: 'inherit' })
+  execSync('node scripts/incremental-exports.js --force', { stdio: 'inherit' })
   console.log('✅ 导出文件生成完成\n')
 
   console.log('🎉 构建完成！')
