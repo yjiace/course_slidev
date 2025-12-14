@@ -1,8 +1,9 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
 // VitePress 配置
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid(defineConfig({
   // 站点基础信息
   title: 'SmallYoung 课程门户',
   description: 'SmallYoung 现代化课件系统 - 课程导航与学习平台',
@@ -177,5 +178,13 @@ export default defineConfig({
   lastUpdated: true,
 
   // 清理 URL
-  cleanUrls: true
-})
+  cleanUrls: true,
+
+  // Mermaid 配置
+  mermaid: {
+    theme: 'default'
+  },
+  mermaidPlugin: {
+    class: 'mermaid-diagram'
+  }
+}))

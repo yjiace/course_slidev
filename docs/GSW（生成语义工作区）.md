@@ -12,6 +12,14 @@ cover: https://cf-img.smallyoung.cn/file/1765677003239_gsw.png
 
 ## 写在前面
 
+> 🎧 **更喜欢听？试试本文的音频版本**
+<AudioPlayer 
+  src="https://cf-img.smallyoung.cn/file/1765711608761_AI从健忘到理解故事因果.m4a"
+  title="给 AI 装上记忆系统：深度解读 GSW"
+  author="SmallYoung"
+/>
+
+
 你有没有想过，为什么 AI 在回答问题时，有时候会"丢三落四"？明明文档里有完整的故事线，AI 却只能抓住零散的片段？
 
 今天要介绍的 GSW（Generative Semantic Workspace，生成语义工作区）技术，正在改变这一切——它让 AI 拥有了类似人类的"情景记忆"能力！

@@ -17,6 +17,10 @@ import DocCategoryNav from './components/DocCategoryNav.vue'
 import DocDetailPage from './components/DocDetailPage.vue'
 import CoursesPage from './components/CoursesPage.vue'
 
+// 媒体组件
+import AudioPlayer from './components/AudioPlayer.vue'
+import VideoPlayer from './components/VideoPlayer.vue'
+
 export default {
   extends: DefaultTheme,
   Layout,
@@ -34,6 +38,10 @@ export default {
     app.component('DocCategoryNav', DocCategoryNav)
     app.component('DocDetailPage', DocDetailPage)
     app.component('CoursesPage', CoursesPage)
+
+    // 注册全局组件 - 媒体
+    app.component('AudioPlayer', AudioPlayer)
+    app.component('VideoPlayer', VideoPlayer)
   }
 } satisfies Theme
 
