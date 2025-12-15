@@ -1,8 +1,4 @@
 <template>
-  <!-- Schema.org 结构化数据 (仅客户端) -->
-  <ClientOnly>
-    <SchemaOrg />
-  </ClientOnly>
   <!-- 首页布局 -->
   <div v-if="frontmatter.layout === 'home'" class="min-h-screen flex flex-col">
     <HomePage class="flex-1" />
@@ -48,7 +44,6 @@ import DocsPage from './components/DocsPage.vue'
 import DocDetailPage from './components/DocDetailPage.vue'
 import GlobalFooter from './components/GlobalFooter.vue'
 import ImageViewer from './components/ImageViewer.vue'
-import SchemaOrg from './components/SchemaOrg.vue'
 import { data as docsData } from '../data/docs.data'
 
 const { frontmatter } = useData()

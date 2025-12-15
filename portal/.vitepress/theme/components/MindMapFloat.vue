@@ -21,7 +21,7 @@ const calculateButtonPosition = () => {
   if (contentEl) {
     const rect = contentEl.getBoundingClientRect()
     // 按钮应该在内容区域右边缘内侧
-    const rightOffset = window.innerWidth - rect.right + 16
+    const rightOffset = window.innerWidth - rect.right
     buttonRight.value = `${Math.max(32, rightOffset)}px`
   } else {
     // 如果找不到内容区域，使用默认值

@@ -186,5 +186,84 @@ export default withMermaid(defineConfig({
   },
   mermaidPlugin: {
     class: 'mermaid-diagram'
+  },
+
+  // 在构建时为每个页面生成 Schema.org 结构化数据
+  transformHead({ pageData }) {
+    const head: Array<[string, Record<string, string>]> = []
+    const siteUrl = 'https://www.smallyoung.cn'
+    const fm = pageData.frontmatter
+
+    // 跳过没有标题或有特殊布局的页面
+    if (!fm.title || (fm.layout && fm.layout !== 'doc-detail')) {
+      return head
+    }
+
+    // 生成 Article Schema
+    if (fm.type !== 'course') {
+      const articleSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: fm.title,
+        description: fm.description || '',
+        image: fm.cover ? (fm.cover.startsWith('//') ? `https:${fm.cover}` : fm.cover) : undefined,
+        datePublished: fm.date,
+        dateModified: fm.dateModified || fm.date,
+        author: {
+          '@type': 'Person',
+          name: fm.author || 'SmallYoung'
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'SmallYoung',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${siteUrl}/favicon.png`
+          }
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `${siteUrl}${pageData.relativePath.replace(/\.md$/, '.html').replace(/index\.html$/, '')}`
+        },
+        keywords: fm.keywords?.join(', ') || fm.tags?.join(', ') || undefined
+      }
+
+      head.push([
+        'script',
+        { type: 'application/ld+json' },
+        JSON.stringify(articleSchema)
+      ] as any)
+    }
+
+    // 生成 Course Schema
+    if (fm.type === 'course') {
+      const courseSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Course',
+        name: fm.title,
+        description: fm.description || '',
+        provider: {
+          '@type': 'Organization',
+          name: 'SmallYoung',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${siteUrl}/favicon.png`
+          }
+        },
+        image: fm.cover ? (fm.cover.startsWith('//') ? `https:${fm.cover}` : fm.cover) : undefined,
+        hasCourseInstance: {
+          '@type': 'CourseInstance',
+          courseMode: 'online'
+        }
+      }
+
+      head.push([
+        'script',
+        { type: 'application/ld+json' },
+        JSON.stringify(courseSchema)
+      ] as any)
+    }
+
+    return head
   }
 }))
