@@ -20,12 +20,12 @@ const calculateButtonPosition = () => {
   const contentEl = document.querySelector('.VPDoc .content-container') as HTMLElement
   if (contentEl) {
     const rect = contentEl.getBoundingClientRect()
-    // 按钮应该在内容区域右边缘内侧
-    const rightOffset = window.innerWidth - rect.right
-    buttonRight.value = `${Math.max(20, rightOffset)}px`
+    // 按钮应该在内容区域右边缘外侧，更靠右显示
+    const rightOffset = window.innerWidth - rect.right - 32
+    buttonRight.value = `${Math.max(16, rightOffset)}px`
   } else {
     // 如果找不到内容区域，使用默认值
-    buttonRight.value = '32px'
+    buttonRight.value = '16px'
   }
 }
 
