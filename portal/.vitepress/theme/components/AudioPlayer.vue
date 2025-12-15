@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { mediaManager } from '../utils/mediaManager'
 
 interface Props {
   src: string
@@ -28,6 +29,19 @@ const isMiniMode = ref(false) // 迷你模式状态
 const hasStartedPlaying = ref(false) // 是否曾经开始播放过
 const isDragging = ref(false) // 是否正在拖拽
 const miniPosition = ref({ x: 20, y: 20 }) // 迷你播放器位置（相对右下角）
+
+// 媒体管理器ID
+let mediaId: string | null = null
+
+// 暂停方法供媒体管理器调用
+const pauseAudio = () => {
+  if (audioRef.value && isPlaying.value) {
+    audioRef.value.pause()
+  }
+  // 关闭迷你模式，避免与其他播放器的迷你窗口重叠
+  isMiniMode.value = false
+  hasStartedPlaying.value = false
+}
 
 // 监听滚动，自动切换迷你模式
 const playerRef = ref<HTMLElement | null>(null)
@@ -173,11 +187,21 @@ const onPlay = () => {
   isPlaying.value = true
   hasStartedPlaying.value = true
   checkMiniMode()
+  
+  // 通知媒体管理器，暂停其他播放器
+  if (mediaId) {
+    mediaManager.notifyPlay(mediaId)
+  }
 }
 
 const onPause = () => {
   isPlaying.value = false
   // 暂停时不关闭迷你模式，保持 hasStartedPlaying 状态
+  
+  // 通知媒体管理器
+  if (mediaId) {
+    mediaManager.notifyPause(mediaId)
+  }
 }
 
 const onEnded = () => {
@@ -218,12 +242,23 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeydown)
   window.addEventListener('scroll', checkMiniMode, { passive: true })
   window.addEventListener('resize', checkMiniMode, { passive: true })
+  
+  // 注册到媒体管理器
+  if (audioRef.value) {
+    mediaId = mediaManager.registerMedia('audio', audioRef.value, pauseAudio)
+  }
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
   window.removeEventListener('scroll', checkMiniMode)
   window.removeEventListener('resize', checkMiniMode)
+  
+  // 从媒体管理器注销
+  if (mediaId) {
+    mediaManager.unregisterMedia(mediaId)
+    mediaId = null
+  }
 })
 </script>
 
@@ -346,17 +381,28 @@ onUnmounted(() => {
           </svg>
         </button>
 
-        <!-- 中心区域：唱片 + 播放按钮重叠 -->
+        <!-- 中心区域：唱片 + 播放按钮重叠 + 动效 -->
         <div class="mini-center" @click.stop @mousedown.stop>
+          <!-- 脉冲光环动画 -->
+          <div class="pulse-ring" :class="{ active: isPlaying }"></div>
+          <div class="pulse-ring ring2" :class="{ active: isPlaying }"></div>
+          
           <!-- 唱片背景 -->
           <div class="mini-disc" :class="{ spinning: isPlaying }">
             <div class="mini-disc-groove"></div>
             <div class="mini-disc-groove ring2"></div>
-            <div class="mini-disc-inner"></div>
+            <div class="mini-disc-inner">
+              <!-- 音波动画 -->
+              <div class="sound-waves" :class="{ active: isPlaying }">
+                <span class="wave"></span>
+                <span class="wave"></span>
+                <span class="wave"></span>
+              </div>
+            </div>
           </div>
           
           <!-- 播放按钮覆盖在唱片上 -->
-          <button class="mini-play-btn" @click.stop="togglePlay">
+          <button class="mini-play-btn" :class="{ playing: isPlaying }" @click.stop="togglePlay">
             <svg v-if="isPlaying" viewBox="0 0 24 24" fill="currentColor">
               <rect x="6" y="4" width="4" height="16" rx="1" />
               <rect x="14" y="4" width="4" height="16" rx="1" />
@@ -807,6 +853,7 @@ onUnmounted(() => {
   box-shadow: 
     0 2px 8px rgba(102, 126, 234, 0.5),
     inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  overflow: hidden;
 }
 
 .mini-disc-inner::after {
@@ -819,6 +866,84 @@ onUnmounted(() => {
   background: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* 脉冲光环动画 */
+.pulse-ring {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pulse-ring.active {
+  animation: pulse-expand 2s ease-out infinite;
+}
+
+.pulse-ring.ring2.active {
+  animation-delay: 1s;
+}
+
+@keyframes pulse-expand {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+    border-color: rgba(102, 126, 234, 0.6);
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+    border-color: rgba(102, 126, 234, 0);
+  }
+}
+
+/* 音波动画 */
+.sound-waves {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 12px;
+}
+
+.sound-waves .wave {
+  width: 2px;
+  height: 4px;
+  background: white;
+  border-radius: 1px;
+  opacity: 0.8;
+}
+
+.sound-waves.active .wave {
+  animation: wave-bounce 0.5s ease-in-out infinite alternate;
+}
+
+.sound-waves.active .wave:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.sound-waves.active .wave:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.sound-waves.active .wave:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes wave-bounce {
+  0% {
+    height: 4px;
+  }
+  100% {
+    height: 12px;
+  }
 }
 
 /* 播放按钮 - 覆盖在唱片中心 */
@@ -851,6 +976,30 @@ onUnmounted(() => {
 
 .mini-play-btn:active {
   transform: scale(0.95);
+}
+
+.mini-play-btn.playing {
+  background: rgba(102, 126, 234, 0.4);
+  box-shadow: 
+    0 4px 20px rgba(102, 126, 234, 0.5),
+    0 0 15px rgba(102, 126, 234, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  animation: btn-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes btn-glow {
+  0% {
+    box-shadow: 
+      0 4px 20px rgba(102, 126, 234, 0.5),
+      0 0 15px rgba(102, 126, 234, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow: 
+      0 4px 25px rgba(118, 75, 162, 0.6),
+      0 0 20px rgba(118, 75, 162, 0.4),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  }
 }
 
 .mini-play-btn svg {

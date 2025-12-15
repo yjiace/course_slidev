@@ -29,6 +29,9 @@
       <GlobalFooter />
     </template>
   </DefaultTheme.Layout>
+  
+  <!-- 全局图片预览组件 -->
+  <ImageViewer />
 </template>
 
 <script setup lang="ts">
@@ -40,6 +43,7 @@ import CoursesPage from './components/CoursesPage.vue'
 import DocsPage from './components/DocsPage.vue'
 import DocDetailPage from './components/DocDetailPage.vue'
 import GlobalFooter from './components/GlobalFooter.vue'
+import ImageViewer from './components/ImageViewer.vue'
 import { data as docsData } from '../data/docs.data'
 
 const { frontmatter } = useData()
@@ -57,3 +61,4 @@ const currentDoc = computed(() => {
   return null
 })
 </script>
+

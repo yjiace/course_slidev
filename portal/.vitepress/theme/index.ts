@@ -20,6 +20,10 @@ import CoursesPage from './components/CoursesPage.vue'
 // 媒体组件
 import AudioPlayer from './components/AudioPlayer.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
+import ImageViewer from './components/ImageViewer.vue'
+
+// 交互组件
+import MindMapFloat from './components/MindMapFloat.vue'
 
 export default {
   extends: DefaultTheme,
@@ -42,6 +46,11 @@ export default {
     // 注册全局组件 - 媒体
     app.component('AudioPlayer', AudioPlayer)
     app.component('VideoPlayer', VideoPlayer)
+    app.component('ImageViewer', ImageViewer)
+
+    // 注册全局组件 - 交互
+    app.component('MindMapFloat', MindMapFloat)
   }
 } satisfies Theme
+
 

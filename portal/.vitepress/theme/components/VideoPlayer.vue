@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { mediaManager } from '../utils/mediaManager'
 
 interface Props {
   src: string
@@ -21,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const videoRef = ref<HTMLVideoElement | null>(null)
-const miniVideoRef = ref<HTMLVideoElement | null>(null)
+const miniCanvasRef = ref<HTMLCanvasElement | null>(null)
 const containerRef = ref<HTMLElement | null>(null)
 const isPlaying = ref(false)
 const currentTime = ref(0)
@@ -39,6 +40,82 @@ const showSettings = ref(false)
 const isMiniMode = ref(false)
 const hasStartedPlaying = ref(false)
 const showMiniControls = ref(false) // 迷你播放器控件显示
+
+// 媒体管理器ID
+let mediaId: string | null = null
+let hideControlsTimeout: ReturnType<typeof setTimeout> | null = null
+
+// 迷你播放器拖拽状态
+const isDragging = ref(false)
+const miniPosition = ref({ x: 20, y: 20 })
+
+// 暂停方法供媒体管理器调用
+const pauseVideo = () => {
+  if (videoRef.value && isPlaying.value) {
+    videoRef.value.pause()
+  }
+  // 关闭迷你模式，避免与其他播放器的迷你窗口重叠
+  isMiniMode.value = false
+  hasStartedPlaying.value = false
+}
+
+// Canvas 绘制动画帧 ID
+let canvasAnimationId: number | null = null
+
+// 绘制视频帧到 canvas
+const drawVideoFrame = () => {
+  if (!videoRef.value || !miniCanvasRef.value || !isMiniMode.value) {
+    if (canvasAnimationId) {
+      cancelAnimationFrame(canvasAnimationId)
+      canvasAnimationId = null
+    }
+    return
+  }
+  
+  const video = videoRef.value
+  const canvas = miniCanvasRef.value
+  const ctx = canvas.getContext('2d')
+  
+  if (ctx && video.readyState >= 2) {
+    // 设置 canvas 尺寸
+    const aspectRatio = video.videoWidth / video.videoHeight
+    canvas.width = 280  // 迷你播放器宽度
+    canvas.height = canvas.width / aspectRatio
+    
+    // 绘制当前帧
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+  }
+  
+  // 继续绘制下一帧
+  canvasAnimationId = requestAnimationFrame(drawVideoFrame)
+}
+
+// 启动 canvas 绘制
+const startCanvasDrawing = () => {
+  if (canvasAnimationId) {
+    cancelAnimationFrame(canvasAnimationId)
+  }
+  drawVideoFrame()
+}
+
+// 停止 canvas 绘制
+const stopCanvasDrawing = () => {
+  if (canvasAnimationId) {
+    cancelAnimationFrame(canvasAnimationId)
+    canvasAnimationId = null
+  }
+}
+
+// 监听迷你模式变化
+watch(isMiniMode, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      startCanvasDrawing()
+    })
+  } else {
+    stopCanvasDrawing()
+  }
+})
 
 // 监听滚动，自动切换迷你模式
 const checkMiniMode = () => {
@@ -170,6 +247,44 @@ const scrollToPlayer = () => {
   containerRef.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
+// 迷你播放器拖拽功能
+const startDrag = (event: MouseEvent) => {
+  // 如果点击的是按钮或进度条，不开始拖拽
+  if ((event.target as HTMLElement).closest('button') || 
+      (event.target as HTMLElement).closest('.mini-progress')) {
+    return
+  }
+  
+  event.preventDefault()
+  isDragging.value = true
+  
+  const startX = event.clientX
+  const startY = event.clientY
+  const startPosX = miniPosition.value.x
+  const startPosY = miniPosition.value.y
+  
+  const onMouseMove = (e: MouseEvent) => {
+    if (!isDragging.value) return
+    const deltaX = startX - e.clientX
+    const deltaY = startY - e.clientY
+    
+    // 计算新位置（相对右下角的距离）
+    const newX = Math.max(10, Math.min(window.innerWidth - 200, startPosX + deltaX))
+    const newY = Math.max(10, Math.min(window.innerHeight - 150, startPosY + deltaY))
+    
+    miniPosition.value = { x: newX, y: newY }
+  }
+  
+  const onMouseUp = () => {
+    isDragging.value = false
+    document.removeEventListener('mousemove', onMouseMove)
+    document.removeEventListener('mouseup', onMouseUp)
+  }
+  
+  document.addEventListener('mousemove', onMouseMove)
+  document.addEventListener('mouseup', onMouseUp)
+}
+
 // 事件处理
 const onLoadedMetadata = () => {
   if (videoRef.value) {
@@ -189,11 +304,21 @@ const onPlay = () => {
   hasStartedPlaying.value = true
   resetHideTimeout()
   checkMiniMode()
+  
+  // 通知媒体管理器，暂停其他播放器
+  if (mediaId) {
+    mediaManager.notifyPlay(mediaId)
+  }
 }
 
 const onPause = () => {
   isPlaying.value = false
   showControls.value = true
+  
+  // 通知媒体管理器
+  if (mediaId) {
+    mediaManager.notifyPause(mediaId)
+  }
 }
 
 const onEnded = () => {
@@ -255,6 +380,11 @@ onMounted(() => {
   document.addEventListener('fullscreenchange', onFullscreenChange)
   window.addEventListener('scroll', checkMiniMode, { passive: true })
   window.addEventListener('resize', checkMiniMode, { passive: true })
+  
+  // 注册到媒体管理器
+  if (videoRef.value) {
+    mediaId = mediaManager.registerMedia('video', videoRef.value, pauseVideo)
+  }
 })
 
 onUnmounted(() => {
@@ -263,6 +393,15 @@ onUnmounted(() => {
   window.removeEventListener('scroll', checkMiniMode)
   window.removeEventListener('resize', checkMiniMode)
   if (hideControlsTimeout) clearTimeout(hideControlsTimeout)
+  
+  // 停止 canvas 绘制
+  stopCanvasDrawing()
+  
+  // 从媒体管理器注销
+  if (mediaId) {
+    mediaManager.unregisterMedia(mediaId)
+    mediaId = null
+  }
 })
 
 const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2]
@@ -414,6 +553,9 @@ const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2]
       <div 
         v-if="isMiniMode && mini"
         class="mini-video-player"
+        :class="{ dragging: isDragging }"
+        :style="{ right: `${miniPosition.x}px`, bottom: `${miniPosition.y}px` }"
+        @mousedown="startDrag"
         @mouseenter="showMiniControls = true"
         @mouseleave="showMiniControls = false"
       >
@@ -441,11 +583,12 @@ const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2]
           </svg>
         </button>
 
-        <!-- 视频画面 - 直接使用主视频元素的引用 -->
+        <!-- 视频画面容器 - 使用 canvas 显示当前帧 -->
         <div class="mini-video-container">
-          <!-- 显示封面或当前帧 -->
-          <div class="mini-video-poster" v-if="poster" :style="{ backgroundImage: `url(${poster})` }"></div>
-          <div class="mini-video-frame" v-else></div>
+          <canvas 
+            ref="miniCanvasRef" 
+            class="mini-video-canvas"
+          ></canvas>
         </div>
 
         <!-- 中心播放/暂停按钮 -->
@@ -765,11 +908,9 @@ video {
 /* ==================== 迷你视频播放器 ==================== */
 .mini-video-player {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
   z-index: 9999;
-  width: 180px;
-  height: 120px;
+  width: 280px;
+  height: 170px;
   background: #1a1a2e;
   border-radius: 12px;
   box-shadow: 
@@ -777,13 +918,22 @@ video {
     0 0 0 1px rgba(255, 255, 255, 0.1);
   overflow: hidden;
   user-select: none;
-  transition: box-shadow 0.2s ease;
+  cursor: grab;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .mini-video-player:hover {
   box-shadow: 
     0 12px 48px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.mini-video-player.dragging {
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 /* 关闭按钮 - 悬停显示 */
@@ -865,31 +1015,17 @@ video {
   position: absolute;
   inset: 0;
   background: #000;
-}
-
-/* 封面图 */
-.mini-video-poster {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* 无封面时的占位 */
-.mini-video-frame {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.mini-video-frame::after {
-  content: '🎬';
-  font-size: 32px;
-  opacity: 0.5;
+/* Canvas 视频画面 */
+.mini-video-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* 中心播放按钮 - 悬停显示 */
