@@ -11,6 +11,24 @@ const scale = ref(1)
 const minScale = 0.3
 const maxScale = 3
 
+// 按钮位置（动态计算）
+const buttonRight = ref('32px')
+
+// 计算按钮位置：基于 VitePress 内容区域
+const calculateButtonPosition = () => {
+  // 查找 VitePress 内容区域
+  const contentEl = document.querySelector('.VPDoc .content-container') as HTMLElement
+  if (contentEl) {
+    const rect = contentEl.getBoundingClientRect()
+    // 按钮应该在内容区域右边缘内侧
+    const rightOffset = window.innerWidth - rect.right + 16
+    buttonRight.value = `${Math.max(32, rightOffset)}px`
+  } else {
+    // 如果找不到内容区域，使用默认值
+    buttonRight.value = '32px'
+  }
+}
+
 // 打开弹框
 const openModal = () => {
   isOpen.value = true
@@ -64,10 +82,16 @@ const handleKeydown = (e: KeyboardEvent) => {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
+  window.addEventListener('resize', calculateButtonPosition)
+  // 初始计算位置
+  calculateButtonPosition()
+  // 延迟再次计算，确保 DOM 完全渲染
+  setTimeout(calculateButtonPosition, 500)
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
+  window.removeEventListener('resize', calculateButtonPosition)
 })
 </script>
 
@@ -76,6 +100,7 @@ onUnmounted(() => {
     <!-- 浮动按钮 -->
     <button 
       class="mindmap-float-btn"
+      :style="{ right: buttonRight }"
       @click="openModal"
       :title="title || '查看思维导图'"
     >
@@ -150,8 +175,8 @@ onUnmounted(() => {
 /* 浮动按钮 - 定位在文章内容区域的右下角 */
 .mindmap-float-btn {
   position: fixed;
-  /* 计算位置：避开右侧目录（约256px）和右边距 */
-  right: calc(var(--vp-aside-width, 256px) + 32px);
+  /* right 值通过 JavaScript 动态计算 */
+  right: 32px; /* 默认值，会被 JS 覆盖 */
   bottom: 32px;
   z-index: 100;
   
@@ -185,17 +210,10 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
-/* 当右侧目录隐藏时（窄屏），调整位置 */
-@media (max-width: 1280px) {
-  .mindmap-float-btn {
-    right: 32px;
-  }
-}
-
 /* 响应式：小屏幕 */
 @media (max-width: 768px) {
   .mindmap-float-btn {
-    right: 16px;
+    right: 16px !important; /* 小屏幕强制使用固定位置 */
     bottom: 80px;
     width: 40px;
     height: 40px;
