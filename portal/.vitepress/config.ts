@@ -194,8 +194,14 @@ export default withMermaid(defineConfig({
     const siteUrl = 'https://www.smallyoung.cn'
     const fm = pageData.frontmatter
 
-    // 跳过没有标题或有特殊布局的页面
-    if (!fm.title || (fm.layout && fm.layout !== 'doc-detail')) {
+    // 跳过没有标题的页面
+    if (!fm.title) {
+      return head
+    }
+
+    // 跳过特殊布局页面（首页、列表页等）
+    const skipLayouts = ['home', 'docs', 'courses']
+    if (fm.layout && skipLayouts.includes(fm.layout)) {
       return head
     }
 
