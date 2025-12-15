@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import { useData, useRoute } from 'vitepress'
-import { useHead } from '@unhead/vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useData, useRoute, inBrowser } from 'vitepress'
 
-const { frontmatter, site } = useData()
+const { frontmatter } = useData()
 const route = useRoute()
 
 // 站点基础信息
@@ -97,17 +96,39 @@ const schemas = computed(() => {
   return [articleSchema.value, courseSchema.value, faqSchema.value].filter(Boolean)
 })
 
-// 使用 watch 动态更新 head
-watch(schemas, (newSchemas) => {
-  if (newSchemas.length > 0) {
-    useHead({
-      script: newSchemas.map(schema => ({
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify(schema)
-      }))
-    })
-  }
-}, { immediate: true })
+// JSON-LD 字符串
+const jsonLdString = computed(() => {
+  if (schemas.value.length === 0) return ''
+  return schemas.value.map(s => JSON.stringify(s)).join('')
+})
+
+// 在客户端动态添加 script 标签
+const scriptElements = ref<HTMLScriptElement[]>([])
+
+onMounted(() => {
+  if (!inBrowser) return
+  
+  // 移除旧的 script 标签
+  scriptElements.value.forEach(el => el.remove())
+  scriptElements.value = []
+  
+  // 添加新的 script 标签
+  schemas.value.forEach(schema => {
+    if (schema) {
+      const script = document.createElement('script')
+      script.type = 'application/ld+json'
+      script.textContent = JSON.stringify(schema)
+      document.head.appendChild(script)
+      scriptElements.value.push(script)
+    }
+  })
+})
+
+onUnmounted(() => {
+  // 清理添加的 script 标签
+  scriptElements.value.forEach(el => el.remove())
+  scriptElements.value = []
+})
 </script>
 
 <template>
