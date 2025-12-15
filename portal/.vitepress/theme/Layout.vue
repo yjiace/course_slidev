@@ -1,7 +1,8 @@
 <template>
-  <!-- Schema.org 结构化数据 -->
-  <SchemaOrg />
-  
+  <!-- Schema.org 结构化数据 (仅客户端) -->
+  <ClientOnly>
+    <SchemaOrg />
+  </ClientOnly>
   <!-- 首页布局 -->
   <div v-if="frontmatter.layout === 'home'" class="min-h-screen flex flex-col">
     <HomePage class="flex-1" />
