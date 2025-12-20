@@ -751,7 +751,7 @@ npm run demo:all
 2. 构建 A2UI Lit 渲染器
 3. 启动 Python 后端（AI 智能体）
 4. 启动开发服务器
-5. 自动打开浏览器访问 http://localhost:5173
+5. 自动打开浏览器访问 `http://localhost:5173`
 
 ### 步骤 5：尝试交互
 
