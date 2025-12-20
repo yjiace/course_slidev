@@ -13,8 +13,8 @@ cover: //oss.smallyoung.cn/a2ui/cover.png
 # A2UI 协议完全指南 | Google AI智能体界面协议教程
 
 > **A2UI (Agent to UI)** 是由 Google 创建的声明式 UI 协议，用于智能体驱动的界面。它允许 AI 智能体生成丰富的、交互式的用户界面，这些界面可以在 Web、移动端和桌面等不同平台上以原生方式渲染，而无需执行任意代码。
->
-> 📌 **Demo演示地址**: https://a2ui.smallyoung.cn
+> 
+> 📌 **Demo演示地址**: https://a2ui.smallyoung.cn  
 > 📌 **官方网站**：https://a2ui.org  
 > 📌 **GitHub**：https://github.com/google/A2UI  
 > 📌 **协议版本**：v0.8 (Stable) | v0.9 (Draft)  
