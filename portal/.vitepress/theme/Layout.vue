@@ -25,7 +25,7 @@
   
   <!-- 默认 VitePress 布局 -->
   <DefaultTheme.Layout v-else>
-    <template #doc-footer-before>
+    <template #layout-bottom>
       <GlobalFooter />
     </template>
   </DefaultTheme.Layout>

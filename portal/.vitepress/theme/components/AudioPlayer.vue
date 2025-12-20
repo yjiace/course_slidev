@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { mediaManager } from '../utils/mediaManager'
 
 interface Props {
@@ -23,11 +23,12 @@ const currentTime = ref(0)
 const duration = ref(0)
 const volume = ref(1)
 const isMuted = ref(false)
-const isLoading = ref(true)
+const isLoading = ref(false) // 初始为 false，只有开始加载后才设为 true
 const showVolume = ref(false)
 const isMiniMode = ref(false) // 迷你模式状态
 const hasStartedPlaying = ref(false) // 是否曾经开始播放过
 const isDragging = ref(false) // 是否正在拖拽
+const hasInteracted = ref(false) // 是否已点击过播放按钮（懒加载标志）
 const miniPosition = ref({ x: 20, y: 20 }) // 迷你播放器位置（相对右下角）
 
 // 媒体管理器ID
@@ -77,6 +78,19 @@ const progress = computed(() => {
 // 播放/暂停
 const togglePlay = () => {
   if (!audioRef.value) return
+  
+  // 首次点击时，设置懒加载标志并触发加载
+  if (!hasInteracted.value) {
+    hasInteracted.value = true
+    isLoading.value = true
+    // 等待 src 被设置后再播放
+    nextTick(() => {
+      audioRef.value?.load()
+      audioRef.value?.play()
+    })
+    return
+  }
+  
   if (isPlaying.value) {
     audioRef.value.pause()
   } else {
@@ -263,10 +277,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- 隐藏的原生播放器 -->
+  <!-- 隐藏的原生播放器 - 只有点击后才加载 src -->
   <audio
     ref="audioRef"
-    :src="src"
+    :src="hasInteracted ? src : undefined"
     @loadedmetadata="onLoadedMetadata"
     @timeupdate="onTimeUpdate"
     @play="onPlay"

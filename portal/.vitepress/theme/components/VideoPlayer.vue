@@ -30,7 +30,7 @@ const duration = ref(0)
 const volume = ref(1)
 const isMuted = ref(props.muted)
 const isFullscreen = ref(false)
-const isLoading = ref(true)
+const isLoading = ref(false) // 初始为 false，只有开始加载后才设为 true
 const showControls = ref(true)
 const showVolume = ref(false)
 const playbackRate = ref(1)
@@ -40,6 +40,7 @@ const showSettings = ref(false)
 const isMiniMode = ref(false)
 const hasStartedPlaying = ref(false)
 const showMiniControls = ref(false) // 迷你播放器控件显示
+const hasInteracted = ref(false) // 是否已点击过播放按钮（懒加载标志）
 
 // 媒体管理器ID
 let mediaId: string | null = null
@@ -153,6 +154,19 @@ const progress = computed(() => {
 // 播放/暂停
 const togglePlay = () => {
   if (!videoRef.value) return
+  
+  // 首次点击时，设置懒加载标志并触发加载
+  if (!hasInteracted.value) {
+    hasInteracted.value = true
+    isLoading.value = true
+    // 等待 src 被设置后再播放
+    nextTick(() => {
+      videoRef.value?.load()
+      videoRef.value?.play()
+    })
+    return
+  }
+  
   if (isPlaying.value) {
     videoRef.value.pause()
   } else {
@@ -415,12 +429,12 @@ const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 2]
     @mousemove="resetHideTimeout"
     @mouseleave="isPlaying && (showControls = false)"
   >
-    <!-- 视频元素 -->
+    <!-- 视频元素 - 只有点击后才加载 src -->
     <video
       ref="videoRef"
-      :src="src"
+      :src="hasInteracted ? src : undefined"
       :poster="poster"
-      :autoplay="autoplay"
+      :autoplay="false"
       :loop="loop"
       :muted="muted"
       @loadedmetadata="onLoadedMetadata"
