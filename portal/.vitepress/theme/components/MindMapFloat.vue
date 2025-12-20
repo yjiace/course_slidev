@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { convertToMermaid } from '../utils/mindmapParser'
 
-defineProps<{
+const props = defineProps<{
   title?: string
 }>()
 
@@ -14,35 +15,111 @@ const maxScale = 3
 // 按钮位置（动态计算）
 const buttonRight = ref('32px')
 
+// 隐藏插槽容器的 ref
+const slotContainer = ref<HTMLElement | null>(null)
+
+// Mermaid 渲染相关
+const mermaidContainer = ref<HTMLElement | null>(null)
+const mermaidCode = ref('')
+const isRendering = ref(false)
+const renderError = ref('')
+
+// 从 DOM 中提取代码块内容
+const extractSlotContent = (): string => {
+  if (!slotContainer.value) return ''
+  
+  // 查找代码块元素
+  const codeBlocks = slotContainer.value.querySelectorAll('pre code, code')
+  if (codeBlocks.length > 0) {
+    // 获取第一个代码块的文本内容
+    const code = codeBlocks[0] as HTMLElement
+    return code.textContent || code.innerText || ''
+  }
+  
+  // 如果没有代码块，获取整个文本内容
+  return slotContainer.value.textContent || slotContainer.value.innerText || ''
+}
+
+// 渲染 Mermaid 图表
+const renderMermaid = async () => {
+  if (!mermaidContainer.value || !mermaidCode.value) return
+  
+  isRendering.value = true
+  renderError.value = ''
+  
+  try {
+    // 动态导入 mermaid
+    const mermaid = await import('mermaid')
+    
+    // 初始化 mermaid
+    mermaid.default.initialize({
+      startOnLoad: false,
+      theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      }
+    })
+    
+    // 生成唯一 ID
+    const id = `mindmap-${Date.now()}`
+    
+    // 渲染 SVG
+    const { svg } = await mermaid.default.render(id, mermaidCode.value)
+    
+    if (mermaidContainer.value) {
+      mermaidContainer.value.innerHTML = svg
+    }
+  } catch (err: any) {
+    console.error('Mermaid 渲染错误:', err)
+    renderError.value = err.message || '图表渲染失败'
+  } finally {
+    isRendering.value = false
+  }
+}
+
 // 计算按钮位置：基于 VitePress 内容区域
 const calculateButtonPosition = () => {
-  // 查找 VitePress 内容区域
   const contentEl = document.querySelector('.VPDoc .content-container') as HTMLElement
   if (contentEl) {
     const rect = contentEl.getBoundingClientRect()
-    // 按钮应该在内容区域右边缘外侧，更靠右显示
     const rightOffset = window.innerWidth - rect.right - 100
     buttonRight.value = `${Math.max(16, rightOffset)}px`
   } else {
-    // 如果找不到内容区域，使用默认值
     buttonRight.value = '16px'
   }
 }
 
 // 打开弹框
-const openModal = () => {
+const openModal = async () => {
+  // 提取并转换内容
+  const rawContent = extractSlotContent()
+  
+  if (rawContent) {
+    mermaidCode.value = convertToMermaid(rawContent)
+  }
+  
   isOpen.value = true
   scale.value = 1 // 重置缩放
+  
   // 延迟添加 visible 类，触发动画
   setTimeout(() => {
     isVisible.value = true
   }, 10)
+  
+  // 等待 DOM 完全更新后渲染 Mermaid
+  await nextTick()
+  // 增加延迟确保 Teleport 内容完全挂载
+  setTimeout(() => {
+    renderMermaid()
+  }, 300)
 }
 
 // 关闭弹框
 const closeModal = () => {
   isVisible.value = false
-  // 等待动画完成后再关闭
   setTimeout(() => {
     isOpen.value = false
   }, 300)
@@ -83,9 +160,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
   window.addEventListener('resize', calculateButtonPosition)
-  // 初始计算位置
   calculateButtonPosition()
-  // 延迟再次计算，确保 DOM 完全渲染
   setTimeout(calculateButtonPosition, 500)
 })
 
@@ -97,6 +172,11 @@ onUnmounted(() => {
 
 <template>
   <div class="mindmap-float-container">
+    <!-- 隐藏原始插槽内容 -->
+    <div ref="slotContainer" style="display: none;">
+      <slot></slot>
+    </div>
+    
     <!-- 浮动按钮 -->
     <button 
       class="mindmap-float-btn"
@@ -159,7 +239,20 @@ onUnmounted(() => {
           </div>
           <div class="modal-body" @wheel="handleWheel">
             <div class="mindmap-content" :style="{ transform: `scale(${scale})` }">
-              <slot></slot>
+              <!-- 渲染状态 -->
+              <div v-show="isRendering" class="render-loading">
+                <span>正在生成思维导图...</span>
+              </div>
+              
+              <!-- 错误提示 -->
+              <div v-show="!isRendering && renderError" class="render-error">
+                <p>图表渲染失败</p>
+                <code>{{ renderError }}</code>
+                <pre class="mermaid-code">{{ mermaidCode }}</pre>
+              </div>
+              
+              <!-- Mermaid 渲染容器 -->
+              <div v-show="!isRendering && !renderError" ref="mermaidContainer" class="mermaid-render"></div>
             </div>
           </div>
           <div class="modal-footer">
@@ -172,11 +265,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* 浮动按钮 - 定位在文章内容区域的右下角 */
+/* 浮动按钮 */
 .mindmap-float-btn {
   position: fixed;
-  /* right 值通过 JavaScript 动态计算 */
-  right: 32px; /* 默认值，会被 JS 覆盖 */
+  right: 32px;
   bottom: 32px;
   z-index: 100;
   
@@ -206,22 +298,12 @@ onUnmounted(() => {
   transform: translateY(0) scale(1);
 }
 
-.mindmap-float-btn svg {
-  flex-shrink: 0;
-}
-
-/* 响应式：小屏幕 */
 @media (max-width: 768px) {
   .mindmap-float-btn {
-    right: 16px !important; /* 小屏幕强制使用固定位置 */
+    right: 16px !important;
     bottom: 80px;
     width: 40px;
     height: 40px;
-  }
-  
-  .mindmap-float-btn svg {
-    width: 18px;
-    height: 18px;
   }
 }
 
@@ -240,7 +322,6 @@ onUnmounted(() => {
   
   background: rgba(0, 0, 0, 0);
   backdrop-filter: blur(0px);
-  
   transition: all 0.3s ease;
 }
 
@@ -272,7 +353,7 @@ onUnmounted(() => {
   transform: scale(1) translateY(0);
 }
 
-/* 弹框头部 */
+/* 头部 */
 .modal-header {
   display: flex;
   align-items: center;
@@ -294,7 +375,6 @@ onUnmounted(() => {
   gap: 16px;
 }
 
-/* 缩放控制 */
 .zoom-controls {
   display: flex;
   align-items: center;
@@ -310,12 +390,10 @@ onUnmounted(() => {
   justify-content: center;
   width: 28px;
   height: 28px;
-  
   background: transparent;
   border: none;
   border-radius: 6px;
   color: var(--vp-c-text-2);
-  
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -337,7 +415,6 @@ onUnmounted(() => {
   font-weight: 500;
   color: var(--vp-c-text-2);
   cursor: pointer;
-  transition: color 0.2s ease;
 }
 
 .zoom-value:hover {
@@ -350,12 +427,10 @@ onUnmounted(() => {
   justify-content: center;
   width: 36px;
   height: 36px;
-  
   background: transparent;
   border: none;
   border-radius: 8px;
   color: var(--vp-c-text-2);
-  
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -365,32 +440,65 @@ onUnmounted(() => {
   color: var(--vp-c-text-1);
 }
 
-/* 弹框内容 */
+/* 内容区 */
 .modal-body {
   flex: 1;
   padding: 24px;
   overflow: auto;
 }
 
-/* 思维导图内容容器 */
 .mindmap-content {
   transform-origin: center top;
   transition: transform 0.2s ease;
-  will-change: transform;
+  min-height: 300px;
 }
 
-/* Mermaid 图表样式覆盖 */
-.mindmap-content :deep(.mermaid) {
+.mermaid-render {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 200px;
 }
 
-.mindmap-content :deep(svg) {
-  max-width: none;
+.mermaid-render :deep(svg) {
+  max-width: 100%;
   height: auto;
 }
 
-/* 弹框底部 */
+.render-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: var(--vp-c-text-2);
+}
+
+.render-error {
+  text-align: center;
+  color: var(--vp-c-danger-1);
+}
+
+.render-error code {
+  display: block;
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.mermaid-code {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  text-align: left;
+  font-size: 12px;
+  overflow-x: auto;
+  max-height: 200px;
+}
+
+/* 底部 */
 .modal-footer {
   padding: 12px 24px;
   border-top: 1px solid var(--vp-c-divider);
@@ -402,7 +510,6 @@ onUnmounted(() => {
   color: var(--vp-c-text-3);
 }
 
-/* 暗色模式适配 */
 .dark .mindmap-modal {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }

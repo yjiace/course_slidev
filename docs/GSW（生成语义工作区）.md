@@ -27,7 +27,7 @@ cover: //oss.smallyoung.cn/gsw/cover.png
 
 <MindMapFloat title="📋 GSW 技术深度解析 - 文档结构">
 
-``` mermaid
+```mindmap-data
 # GSW（生成语义工作区）技术深度解读
 ## GSW 核心理念与价值
 - 定义

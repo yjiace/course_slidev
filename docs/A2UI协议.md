@@ -50,61 +50,50 @@ cover: //oss.smallyoung.cn/a2ui/cover.png
 
 <MindMapFloat title="📋 GSW 技术深度解析 - 文档结构">
 
-``` mermaid
-graph LR
-    A[AZUI 协议全指南] --> B[协议概述]
-    A --> C[核心概念]
-    A --> D[消息类型]
-    A --> E[组件模型]
-    A --> F[数据绑定与交互]
-    A --> G[技术实现]
-    
-    B --> B1[定义: Google 创建的声明式 UI 协议]
-    B --> B2[核心目标: AI 智能体安全生成交互式界面]
-    B --> B3[核心优势: 安全、跨平台、流式渲染、LLM 友好]
-    B --> B4[对比: 与 A2A、MCP、AG-UI 的定位区别]
-    
-    C --> C1[三大思想]
-    C --> C2[三大解耦元素]
-    C --> C3[Surface 独立渲染表面]
-    
-    C1 --> C1A["流式消息 (Streaming Messages)"]
-    C1 --> C1B["声明式组件 (Declarative Components)"]
-    C1 --> C1C["数据绑定(Data Binding)"]
-    
-    C2 --> C2A1["组件树 (结构/服务器)"]
-    C2 --> C2A2["数据模型 (状态/服务器)"]
-    C2 --> C2A3["组件目录 (实现/客户端)"]
-    
-    D --> D1[服务器到客户端]
-    D --> D2[客户端到服务器]
-    
-    D1 --> D1A["surfaceUpdate (定义组件)"]
-    D1 --> D1B["dataModelUpdate (更新数据)"]
-    D1 --> D1C["beginRendering (开始渲染保号)"]
-    D1 --> D1D["deleteSurface (移除表面)"]
-    
-    D2 --> D2A["userAction( 用户交互事件)"]
-    D2 --> D2B["error (错误报告)"]
-    
-    E --> E1["邻接列表模型 (扁平化 ID 引用)"]
-    E --> E2[常用组件类型]
-    E --> E3[子元素定义: explicitList 或 template]
-    
-    E2 --> E2A[基础: Text, Button, Image]
-    E2 --> E2B[布局: Row, Column, List, Card]
-    E2 --> E2C[表单: TextField, Checkbox, Dropdown]
-    
-    F --> F1[BoundValue 方式]
-    F --> F2[数据浏览: 支持双向绑定]
-    
-    F1 --> F1A["字面量 (静态)"]
-    F1 --> F1B["路径 (动态绑定)"]
-    F1 --> F1C["初始化简写 (微径+字面量)"]
-    
-    G --> G1[传输协议: JSONL + SSE]
-    G --> G2[渲染流程: 缓冲 -> 信号 -> 实例化原生组件]
-    G --> G3[支持框架: React, Flutter, Angular, Lit]
+```mindmap-data
+# A2UI 协议完全指南
+## 协议概述
+- 定义: Google 创建的声明式 UI 协议
+- 核心目标: AI 智能体安全生成交互式界面
+- 核心优势: 安全、跨平台、流式渲染、LLM 友好
+- 对比: 与 A2A、MCP、AG-UI 的定位区别
+  - 流式消息 (Streaming Messages)
+## 核心概念
+- 三大思想
+  - 声明式组件 (Declarative Components)
+  - 数据绑定 (Data Binding)
+- 三大解耦元素
+  - 组件树 (结构/服务器)
+  - 数据模型 (状态/服务器)
+- Surface (独立渲染表面)
+  - 组件目录 (实现/客户端)
+## 消息类型
+- 服务器到客户端
+  - surfaceUpdate (定义组件)
+  - dataModelUpdate (更新数据)
+  - beginRendering (开始渲染信号)
+  - deleteSurface (移除表面)
+- 客户端到服务器
+  - userAction (用户交互事件)
+  - error (错误报告)
+## 组件模型
+- 邻接列表模型 (扁平化 ID 引用)
+  - 基础: Text, Button, Image
+- 常用组件类型
+  - 布局: Row, Column, List, Card
+- 子元素定义: explicitList 或 template
+  - 表单: TextField, Checkbox, Dropdown
+## 数据绑定与交互
+- BoundValue 方式
+  - 字面量 (静态)
+  - 路径 (动态绑定)
+- 数据流向: 支持双向绑定
+  - 初始化简写 (路径+字面量)
+## 技术实现
+- 传输协议: JSONL + SSE
+- 渲染流程: 缓冲 -> 信号 -> 实例化原生组件
+- 支持框架: React, Flutter, Angular, Lit
+
 ```
 
 </MindMapFloat>
