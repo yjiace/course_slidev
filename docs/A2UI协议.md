@@ -104,11 +104,15 @@ cover: //oss.smallyoung.cn/a2ui/cover.png
 
 ### 什么是 A2UI 协议？
 
+![A2UI协议概述](//oss.smallyoung.cn/a2ui/1.png)
+
 **A2UI（Agent to UI）协议**是 Google 于 2025 年发布的开源协议（规范创建于 2025年9月19日[^1]），解决了一个核心问题：
 
 > **如何让 AI 智能体安全地向客户端发送丰富的用户界面，而不执行任意代码？**
 
 #### 传统方案的局限
+
+![传统方案的局限](//oss.smallyoung.cn/a2ui/2.png)
 
 | 方案 | 问题 |
 |------|------|
@@ -119,6 +123,8 @@ cover: //oss.smallyoung.cn/a2ui/cover.png
 #### A2UI 的解决方案
 
 A2UI 让智能体发送**声明式组件描述**（JSON 格式），客户端使用自己的原生组件库进行渲染。这就像让智能体说一种"通用 UI 语言"，客户端负责翻译和展示。
+
+![声明式组件](//oss.smallyoung.cn/a2ui/3.png)
 
 **核心优势**：
 - 智能体只能使用预先批准的组件，无法执行任意代码
@@ -135,6 +141,8 @@ A2UI 让智能体发送**声明式组件描述**（JSON 格式），客户端使
 | **AG-UI** | 用户交互协议 | 用户与智能体的交互规范 |
 
 ### 协议特点
+
+![协议特点](//oss.smallyoung.cn/a2ui/4.png)
 
 | 特点 | 详细说明 |
 |------|---------|
@@ -166,6 +174,8 @@ sequenceDiagram
 
 ### 数据流的六个阶段
 
+![数据流的六个阶段](//oss.smallyoung.cn/a2ui/6.png)
+
 | 阶段 | 描述 | 关键操作 |
 |------|------|---------|
 | **1. 服务器流** | 服务器通过 SSE 连接开始发送 JSONL 流 | 建立 SSE 连接 |
@@ -187,6 +197,8 @@ A2UI 协议围绕三个核心思想构建，这是理解整个协议的基础：
 | **数据绑定** | Data Binding | UI 结构与应用状态分离，通过 JSON Pointer 路径连接，支持响应式更新 |
 
 ### 三大解耦元素
+
+![三大解耦元素](//oss.smallyoung.cn/a2ui/5.png)
 
 A2UI 的核心设计哲学是**解耦**——将 UI 生成过程中的三个关键元素分离：
 
@@ -249,6 +261,8 @@ flowchart TD
 └─────────────────────────────────────────────┘
 ```
 ## 消息类型
+
+![消息类型](//oss.smallyoung.cn/a2ui/7.png)
 
 A2UI 使用 **JSONL（JSON Lines）** 格式传输消息，每行是一个独立的 JSON 对象。通常通过 **SSE（Server-Sent Events）** 进行传输。
 
@@ -370,6 +384,8 @@ A2UI 使用 **JSONL（JSON Lines）** 格式传输消息，每行是一个独立
 | 数组 | `valueArray` | 值对象数组 |
 ### beginRendering 消息详解
 
+![beginRendering 消息详解](//oss.smallyoung.cn/a2ui/10.png)
+
 `beginRendering` 消息通知客户端已有足够信息进行初始渲染。
 
 ```json
@@ -412,6 +428,8 @@ A2UI 使用 **JSONL（JSON Lines）** 格式传输消息，每行是一个独立
 ## 组件模型
 
 ### 邻接列表模型（Adjacency List Model）
+
+![邻接列表](//oss.smallyoung.cn/a2ui/8.png)
 
 A2UI 使用**邻接列表模型**定义 UI——将整个 UI 定义为**扁平的组件列表**，通过 ID 引用隐式构建树形结构。
 
@@ -564,6 +582,8 @@ A2UI 使用**邻接列表模型**定义 UI——将整个 UI 定义为**扁平�
 
 ### 三种绑定方式
 
+![三种绑定方式](//oss.smallyoung.cn/a2ui/9.png)
+
 #### 方式 1：仅字面量值（静态）
 
 直接使用固定值，不与数据模型关联：
@@ -627,6 +647,8 @@ flowchart LR
 ## 事件处理
 
 ### userAction 消息详解
+
+![事件处理](//oss.smallyoung.cn/a2ui/11.png)
 
 当用户与定义了 `action` 属性的组件交互时，客户端发送 `userAction` 消息。
 
@@ -697,7 +719,10 @@ sequenceDiagram
 | `COMPONENT_NOT_FOUND` | 引用了不存在的组件 ID |
 | `CATALOG_ERROR` | 未知的组件类型 |
 | `RENDER_ERROR` | 渲染过程中发生异常 |
+
 ## 快速入门
+
+![快速入门](//oss.smallyoung.cn/a2ui/13.png)
 
 ### 5分钟运行 A2UI Demo
 
@@ -775,6 +800,8 @@ npm run demo:all
 
 ### 示例 1：用户资料卡片
 
+![用户资料卡片](//oss.smallyoung.cn/a2ui/12.png)
+
 以下是渲染用户资料卡片的完整 JSONL 流：
 
 ```jsonl
@@ -829,6 +856,8 @@ npm run demo:all
 ```
 ## 常见问题
 
+![常见问题](//oss.smallyoung.cn/a2ui/14.png)
+
 ### Q1: A2UI 与传统 UI 框架（如 React）有什么区别？
 
 **A2UI 是协议，不是框架**。它定义了智能体如何描述 UI，而 React/Flutter/Angular 等是用于**渲染**这些描述的框架。A2UI 可以与任何框架配合使用。
@@ -860,6 +889,9 @@ JSONL 支持**流式传输**——智能体可以边生成边发送，客户端�
 | **SSE（推荐）** | Server-Sent Events，最常用的流式传输方式 |
 | **WebSocket** | 支持双向通信的场景 |
 | **A2A 消息** | 通过 A2A 协议嵌入 A2UI 消息 |
+
+![未来畅想](//oss.smallyoung.cn/a2ui/15.png)
+
 ## 学习资源
 
 ### 官方资源
