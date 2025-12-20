@@ -5,7 +5,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 // https://vitepress.dev/reference/site-config
 export default withMermaid(defineConfig({
   // 站点基础信息
-  title: 'SmallYoung 课程门户',
+  title: 'SmallYoung',
   description: 'SmallYoung 现代化课件系统 - 课程导航与学习平台',
   lang: 'zh-CN',
 
