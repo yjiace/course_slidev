@@ -37,20 +37,22 @@ cover: //oss.smallyoung.cn/skills/cover.png
 
 **关键词**: Claude Skills、Anthropic、MCP、Model Context Protocol、AI 技能、智能体、工作流自动化、Progressive Disclosure
 
-![让 AI 成为你的专家助手：Claude Skills 完全指南](//oss.smallyoung.cn/a2ui/0.png)
+![让 AI 成为你的专家助手：Claude Skills 完全指南](//oss.smallyoung.cn/skills/0.png)
 
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
-  src="//oss.smallyoung.cn/a2ui/A2UI_%E5%AE%89%E5%85%A8%E7%94%9F%E6%88%90%E4%BA%A4%E4%BA%92%E5%BC%8F_AI_%E7%95%8C%E9%9D%A2.m4a"
+  src="//oss.smallyoung.cn/skills/Claude_Skills：AI如何从助手进化成专家团队.m4a"
   title="让 AI 成为你的专家助手：Claude Skills 完全指南"
   author="SmallYoung"
 />
 
 <VideoPlayer 
-  src="//oss.smallyoung.cn/a2ui/A2UI%EF%BC%9AAI_%E7%95%8C%E9%9D%A2%E7%9A%84%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80.mp4"
+  src="//oss.smallyoung.cn/skills/从助手到专家：Claude_Skills_完全指南.mp4"
 />
 
 <MindMapFloat title="让 AI 成为你的专家助手：Claude Skills 完全指南">
+
+```mindmap-data
 # Claude Skills 完全指南
 ## 基本概念
 - 定义: 可复用任务能力包系统
@@ -83,18 +85,22 @@ cover: //oss.smallyoung.cn/skills/cover.png
 - 原则: 明确性、可测试性、模块化
 - 调试: 检查元数据、简化测试、查看反馈
 - 避免错误: 功能过宽、缺少示例、步骤模糊
-
+```
 </MindMapFloat>
 
 ## 协议概述
 
 ### 什么是 Claude Skills?
 
+![Claude Skills 主界面](//oss.smallyoung.cn/skills/1.png)
+
 **Claude Skills** 是 Anthropic 推出的一种技能封装系统,解决了一个核心问题:
 
 > **如何让 AI 助手快速掌握特定领域的专业知识,并能够一致、高效地执行重复性任务?**
 
 #### 传统 AI 助手的局限
+
+![传统 AI 助手的局限](//oss.smallyoung.cn/skills/2.png)
 
 | 问题 | 描述 |
 |------|------|
@@ -117,6 +123,8 @@ Claude Skills 让你能够:
 - 🎯 执行一致性:标准化的工作流程
 - 💡 Token 高效:智能的渐进式加载机制
 - 🔧 易于管理:通过 Markdown 文件定义技能
+
+![核心优势](//oss.smallyoung.cn/skills/3.png)
 
 ### Skills 是什么样的?
 
@@ -188,6 +196,8 @@ metadata:               # 可选:自定义元数据
 
 ### 渐进式加载(Progressive Disclosure)
 
+![渐进式加载](//oss.smallyoung.cn/skills/4.png)
+
 这是 Agent Skills 最核心的设计理念,也是区别于传统提示词的关键。
 
 **设计原理**:
@@ -245,6 +255,8 @@ Agent Skills 方式:
 ```
 
 ## Skills 与 MCP 的关系
+
+![Skills 与 MCP 的关系](//oss.smallyoung.cn/skills/5.png)
 
 Claude Skills 和 MCP(Model Context Protocol)是互补的技术,理解它们的区别和协作方式非常重要。
 
@@ -322,6 +334,8 @@ description: "从 Notion 任务数据库生成标准周报"
 
 ## Skill 的结构
 
+![Skill 的结构](//oss.smallyoung.cn/skills/6.png)
+
 ### 完整的 SKILL.md 文件格式
 
 根据 Agent Skills 开放规范,标准的 `SKILL.md` 文件格式如下:
@@ -394,6 +408,8 @@ allowed-tools: "Bash(*) Read Write" # 可选:预批准的工具列表
 ## 快速入门
 
 ### 5 分钟创建你的第一个 Skill
+
+![Skill 的结构](//oss.smallyoung.cn/skills/7.png)
 
 #### 前置条件
 
@@ -603,6 +619,8 @@ Claude 会:
 
 ### 什么是技能编排?
 
+![Skill 的结构](//oss.smallyoung.cn/skills/8.png)
+
 **技能编排(Skill Orchestration)** 是指 Claude 自动选择和组合多个 Skills 来完成复杂任务的能力。
 
 #### 简单场景 vs 复杂场景
@@ -677,6 +695,8 @@ graph LR
 
 ### 场景 1: 企业知识管理
 
+![企业知识管理](//oss.smallyoung.cn/skills/9.png)
+
 **需求**: 将公司内部文档转换为新员工培训材料
 
 **Skills 设计**:
@@ -736,6 +756,8 @@ A: ...
 - ✅ 确保培训材料的一致性和质量
 
 ### 场景 2: 代码审查助手
+
+![代码审查助手](//oss.smallyoung.cn/skills/10.png)
 
 **需求**: 标准化代码审查流程和反馈格式
 
@@ -803,6 +825,8 @@ version: "2.0"
 
 ### 场景 3: 客户支持自动化
 
+![客户支持自动化](//oss.smallyoung.cn/skills/11.png)
+
 **需求**: 快速生成标准化的客户支持回复
 
 **Skills 组合**:
@@ -831,6 +855,8 @@ version: "2.0"
 - ✅ 客户满意度提高 35%
 
 ## 最佳实践
+
+![最佳实践](//oss.smallyoung.cn/skills/12.png)
 
 ### 编写高质量 Skill 的技巧
 
@@ -904,18 +930,7 @@ version: "2.0"
 - 一次性任务 → 使用 Prompts
 - 重复性工作 → 使用 Skills
 
-### Q3: 免费用户可以使用 Skills 吗?
-
-**答**: 不可以,Skills 功能需要订阅付费计划。
-
-**支持的计划**:
-- ✅ Claude Pro ($20/月)
-- ✅ Team 计划
-- ✅ Enterprise 计划
-- ✅ Claude Code 用户
-- ✅ API 用户(需启用 code execution)
-
-### Q4: Skills 能访问我的本地文件吗?
+### Q3: Skills 能访问我的本地文件吗?
 
 **答**: 这取决于你的使用方式和授权。
 
@@ -932,7 +947,7 @@ version: "2.0"
 - 不要在 Skill 中硬编码敏感信息
 - 使用环境变量管理密钥
 
-### Q5: 如何调试一个不工作的 Skill?
+### Q4: 如何调试一个不工作的 Skill?
 
 **答**: 按照以下步骤排查。
 
@@ -1140,6 +1155,8 @@ for (const skillFile of skillFiles) {
 - 🚀 加速 AI 应用开发
 
 ### 从"助手"到"专家"
+
+![从"助手"到"专家"](//oss.smallyoung.cn/skills/14.png)
 
 Claude Skills 的推出标志着 AI 助手的重要进化:
 
