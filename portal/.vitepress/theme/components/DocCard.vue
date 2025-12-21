@@ -4,7 +4,7 @@
       :href="doc.docUrl" 
       class="flex cursor-pointer flex-col gap-3 rounded-xl border border-solid border-transparent bg-card-light p-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:border-primary/50 dark:bg-card-dark dark:hover:border-primary/50"
     >
-      <!-- 封面图片容器 - 正方形 1:1 比例 -->
+      <!-- 封面图片容器 - 16:9 比例 -->
       <div class="cover-image-wrapper relative w-full">
         <div class="cover-image-inner absolute inset-0 rounded-lg bg-cover bg-center bg-no-repeat"
           :style="getCoverStyle()"
@@ -114,11 +114,11 @@ function formatDate(dateStr: string) {
 </script>
 
 <style scoped>
-/* 封面图片容器 - 使用 padding-bottom 技巧创建正方形 */
+/* 封面图片容器 - 使用 padding-bottom 技巧创建 16:9 比例 */
 .cover-image-wrapper {
   position: relative !important;
   width: 100% !important;
-  padding-bottom: 100% !important; /* 100% = 1:1 正方形比例 */
+  padding-bottom: 56.25% !important; /* 56.25% = 16:9 宽屏比例 (9/16 = 0.5625) */
   padding-top: 0 !important;
   padding-left: 0 !important;
   padding-right: 0 !important;

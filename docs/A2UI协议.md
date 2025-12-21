@@ -49,7 +49,7 @@ cover: //oss.smallyoung.cn/a2ui/cover.png
   src="//oss.smallyoung.cn/a2ui/A2UI%EF%BC%9AAI_%E7%95%8C%E9%9D%A2%E7%9A%84%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80.mp4"
 />
 
-<MindMapFloat title="📋 GSW 技术深度解析 - 文档结构">
+<MindMapFloat title="让 AI 生成 UI：A2UI 协议完全指南">
 
 ```mindmap-data
 # A2UI 协议完全指南
