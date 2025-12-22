@@ -381,15 +381,13 @@ allowed-tools: "Bash(*) Read Write" # 可选:预批准的工具列表
 
 # 示例
 
-输入示例:
-```
-示例输入
-```
+## 输入示例:
 
-期望输出:
-```
-示例输出
-```
+  示例输入
+
+## 期望输出:
+
+  示例输出
 ```
 
 ### 关键元素解析
@@ -476,17 +474,17 @@ metadata:
 # 示例
 
 输入:
-```
+
 Hi Team,
 
 I hope this email finds you well. I wanted to follow up on our discussion 
 from last week's meeting about the Q4 project timeline...
 
 [长邮件内容]
-```
+
 
 期望输出:
-```
+
 📧 **邮件摘要**
 
 **核心主题**: Q4 项目时间线调整和资源分配
@@ -499,7 +497,7 @@ from last week's meeting about the Q4 project timeline...
 **行动项**:
 - [ ] 更新项目计划 (负责人: 张三, 截止: 2025-12-25)
 - [ ] 申请额外预算 (负责人: 李四, 截止: 2025-12-23)
-```
+
 ```
 
 #### 步骤 2: 上传 Skill
