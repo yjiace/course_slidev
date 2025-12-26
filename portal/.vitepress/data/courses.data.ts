@@ -41,23 +41,30 @@ export interface CourseIndex {
 
 // 生成课程索引
 function generateIndex(courses: Course[]): CourseIndex {
+  // 按日期倒序排列（最新的在前面）
+  const sortedCourses = [...courses].sort((a, b) => {
+    const dateA = a.date ? new Date(a.date).getTime() : 0
+    const dateB = b.date ? new Date(b.date).getTime() : 0
+    return dateB - dateA  // 倒序：新日期在前
+  })
+
   // 统计每个分类的课程数量
   const categoryMap = new Map<string, number>()
-  courses.forEach(c => {
+  sortedCourses.forEach(c => {
     categoryMap.set(c.category, (categoryMap.get(c.category) || 0) + 1)
   })
   const categories: CategoryInfo[] = Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }))
 
-  const tags = [...new Set(courses.flatMap(c => c.tags))]
+  const tags = [...new Set(sortedCourses.flatMap(c => c.tags))]
 
   return {
     version: '1.0.0',
     generated: new Date().toISOString(),
-    courses,
+    courses: sortedCourses,
     categories,
     tags,
     stats: {
-      totalCourses: courses.length,
+      totalCourses: sortedCourses.length,
       totalCategories: categories.length,
       totalTags: tags.length
     }

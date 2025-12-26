@@ -80,7 +80,8 @@ async function generateSidebarConfig() {
         }
         categoryMap.get(doc.category).push({
             title: doc.title,
-            link: doc.docUrl
+            link: doc.docUrl,
+            date: doc.date  // 添加日期字段用于排序
         })
     }
 
@@ -92,8 +93,12 @@ async function generateSidebarConfig() {
 
     for (const category of sortedCategories) {
         const docsList = categoryMap.get(category)
-        // 按文档标题排序
-        docsList.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'))
+        // 按日期倒序排列（最新的在前面）
+        docsList.sort((a, b) => {
+            const dateA = a.date ? new Date(a.date) : new Date(0)
+            const dateB = b.date ? new Date(b.date) : new Date(0)
+            return dateB - dateA  // 倒序：新日期在前
+        })
 
         sidebarItems.push({
             text: category,

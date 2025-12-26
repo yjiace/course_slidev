@@ -39,23 +39,30 @@ export interface DocIndex {
 
 // 生成文档索引
 function generateDocsIndex(docs: Doc[]): DocIndex {
+    // 按日期倒序排列（最新的在前面）
+    const sortedDocs = [...docs].sort((a, b) => {
+        const dateA = a.date ? new Date(a.date).getTime() : 0
+        const dateB = b.date ? new Date(b.date).getTime() : 0
+        return dateB - dateA  // 倒序：新日期在前
+    })
+
     // 统计每个分类的文档数量
     const categoryMap = new Map<string, number>()
-    docs.forEach(d => {
+    sortedDocs.forEach(d => {
         categoryMap.set(d.category, (categoryMap.get(d.category) || 0) + 1)
     })
     const categories: CategoryInfo[] = Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }))
 
-    const tags = [...new Set(docs.flatMap(d => d.tags))]
+    const tags = [...new Set(sortedDocs.flatMap(d => d.tags))]
 
     return {
         version: '1.0.0',
         generated: new Date().toISOString(),
-        docs,
+        docs: sortedDocs,
         categories,
         tags,
         stats: {
-            totalDocs: docs.length,
+            totalDocs: sortedDocs.length,
             totalCategories: categories.length,
             totalTags: tags.length
         }
