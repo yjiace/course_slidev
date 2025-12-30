@@ -171,6 +171,33 @@ export default withMermaid(defineConfig({
     theme: {
       light: 'github-light',
       dark: 'github-dark'
+    },
+    // 为图片添加懒加载
+    config: (md) => {
+      const defaultImageRender = md.renderer.rules.image || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options))
+
+      md.renderer.rules.image = (tokens, idx, options, env, self) => {
+        const token = tokens[idx]
+
+        // 获取图片 src，为 pub.smallyoung.cn 域名的图片添加 CDN 缩略图前缀
+        const srcIndex = token.attrIndex('src')
+        if (srcIndex >= 0) {
+          const src = token.attrs![srcIndex][1]
+          // 仅处理 pub.smallyoung.cn 域名的图片，且未添加 CDN 前缀
+          if (src.includes('pub.smallyoung.cn') && !src.includes('/cdn-cgi/image/')) {
+            // 在域名和路径之间插入 CDN 前缀
+            const newSrc = src.replace(
+              /\/\/pub\.smallyoung\.cn\//,
+              '//pub.smallyoung.cn/cdn-cgi/image/quality=80/'
+            )
+            token.attrSet('src', newSrc)
+          }
+        }
+
+        // 添加 loading="lazy" 属性
+        token.attrSet('loading', 'lazy')
+        return defaultImageRender(tokens, idx, options, env, self)
+      }
     }
   },
 

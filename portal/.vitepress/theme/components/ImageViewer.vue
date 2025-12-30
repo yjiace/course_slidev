@@ -15,14 +15,23 @@ const startX = ref(0)
 const startY = ref(0)
 const startTranslateX = ref(0)
 const startTranslateY = ref(0)
+const hasDragged = ref(false)
 
 // 最小/最大缩放
 const MIN_SCALE = 0.5
 const MAX_SCALE = 5
 
+// Cloudflare Image Resizing 相关配置
+const CF_IMAGE_CDN_PATTERN = /\/cdn-cgi\/image\/[^\/]+\//
+
+// 转换为原图 URL（移除 Cloudflare Image Resizing 路径前缀）
+function toOriginalUrl(url: string): string {
+  return url.replace(CF_IMAGE_CDN_PATTERN, '/')
+}
+
 // 打开图片预览
 function openViewer(src: string, alt: string = '') {
-  imageSrc.value = src
+  imageSrc.value = toOriginalUrl(src)
   imageAlt.value = alt
   isVisible.value = true
   resetTransform()
@@ -75,6 +84,10 @@ function handleMouseMove(event: MouseEvent) {
   if (!isDragging.value) return
   const deltaX = event.clientX - startX.value
   const deltaY = event.clientY - startY.value
+  // 检测是否有明显拖拽（移动距离 > 5px）
+  if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+    hasDragged.value = true
+  }
   translateX.value = startTranslateX.value + deltaX
   translateY.value = startTranslateY.value + deltaY
 }
@@ -82,11 +95,23 @@ function handleMouseMove(event: MouseEvent) {
 // 拖拽结束
 function handleMouseUp() {
   isDragging.value = false
+  // 延迟重置 hasDragged，让 click 事件能够读取到正确值
+  setTimeout(() => {
+    hasDragged.value = false
+  }, 0)
 }
 
-// 点击背景关闭
+// 点击背景关闭（仅在非拖拽时生效）
 function handleBackgroundClick(event: MouseEvent) {
-  if ((event.target as HTMLElement).classList.contains('image-viewer-overlay')) {
+  // 如果刚进行了拖拽操作，不关闭
+  if (hasDragged.value) return
+  
+  const target = event.target as HTMLElement
+  // 点击 overlay 背景或图片容器（非图片本身）时关闭
+  if (
+    target.classList.contains('image-viewer-overlay') ||
+    target.classList.contains('image-viewer-container')
+  ) {
     closeViewer()
   }
 }

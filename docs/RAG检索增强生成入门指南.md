@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-30
 dateModified: 2025-12-30
 keywords: [RAG, 检索增强生成, Retrieval-Augmented Generation, LLM, 大语言模型, 向量数据库, 知识库问答, GraphRAG, LangChain, LlamaIndex]
-cover: //oss.smallyoung.cn/rag/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag/cover.png
 ---
 
 # RAG 检索增强生成入门指南
@@ -57,20 +57,20 @@ cover: //oss.smallyoung.cn/rag/cover.png
 </MindMapFloat>
 
 
-![什么是RAG](//oss.smallyoung.cn/rag/0.png)
+![什么是RAG](//pub.smallyoung.cn/course_slidev/rag/0.png)
 
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
-  src="//oss.smallyoung.cn/rag/RAG.m4a" author="SmallYoung"
+  src="//pub.smallyoung.cn/course_slidev/rag/RAG.m4a" author="SmallYoung"
 />
 
 <VideoPlayer 
-  src="//oss.smallyoung.cn/rag/RAG.mp4"
+  src="//pub.smallyoung.cn/course_slidev/rag/RAG.mp4"
 />
 
 ## 1. 什么是 RAG？
 
-![什么是RAG](//oss.smallyoung.cn/rag/1.png)
+![什么是RAG](//pub.smallyoung.cn/course_slidev/rag/1.png)
 
 ### 1.1 RAG 的起源
 
@@ -81,7 +81,7 @@ RAG 最早由 **Meta（原 Facebook）在 2020 年 5 月** 提出，论文标题
 
 ### 1.2 为什么需要 RAG？
 
-![局限](//oss.smallyoung.cn/rag/2.png)
+![局限](//pub.smallyoung.cn/course_slidev/rag/2.png)
 
 大语言模型（如 GPT、Claude、Gemini）虽然功能强大，但存在几个关键问题：
 
@@ -94,7 +94,7 @@ RAG 最早由 **Meta（原 Facebook）在 2020 年 5 月** 提出，论文标题
 
 ### 1.3 RAG 的核心思想
 
-![ RAG 的核心思想](//oss.smallyoung.cn/rag/3.png)
+![ RAG 的核心思想](//pub.smallyoung.cn/course_slidev/rag/3.png)
 
 简单来说，RAG 就是：
 
@@ -103,12 +103,9 @@ RAG 最早由 **Meta（原 Facebook）在 2020 年 5 月** 提出，论文标题
 ```
 
 这就像考试时可以"开卷"——不需要死记硬背所有知识，只需在需要时查阅参考资料。
-
----
-
 ## 2. RAG 的工作流程
 
-![工作流程](//oss.smallyoung.cn/rag/4.png)
+![工作流程](//pub.smallyoung.cn/course_slidev/rag/4.png)
 
 一个标准的 RAG 系统包含三个核心阶段：
 
@@ -141,12 +138,9 @@ flowchart LR
 1. **检索（Retrieval）**：将用户问题转换为向量，在数据库中查找最相似的文档块
 2. **增强（Augmentation）**：将检索到的文档与用户问题组合成提示词（Prompt）
 3. **生成（Generation）**：LLM 根据增强后的提示词生成最终答案
-
----
-
 ## 3. RAG 技术体系：完整演进图谱
 
-![完整演进图谱](//oss.smallyoung.cn/rag/8.png)
+![完整演进图谱](//pub.smallyoung.cn/course_slidev/rag/8.png)
 
 RAG 技术形成了一个**多维度演进的技术体系**，从基础架构到专项优化，每个方向都在解决特定的核心问题。下图展示了完整的技术演进脉络：
 
@@ -187,14 +181,11 @@ flowchart TB
     style B fill:#e3f2fd
     style C fill:#e3f2fd
 ```
-
----
-
 ### 3.1 基础架构：从简单到模块化
 
 #### Naive RAG（基础 RAG）
 
-![Naive RAG](//oss.smallyoung.cn/rag/5.png)
+![Naive RAG](//pub.smallyoung.cn/course_slidev/rag/5.png)
 
 最简单的 RAG 实现方式，直接将检索结果拼接到 Prompt 中。
 
@@ -221,7 +212,7 @@ def naive_rag(query, vector_db, llm):
 
 #### Advanced RAG（高级 RAG）
 
-![Advanced RAG](//oss.smallyoung.cn/rag/6.png)
+![Advanced RAG](//pub.smallyoung.cn/course_slidev/rag/6.png)
 
 在基础 RAG 上增加**检索前优化、检索中增强、检索后处理**三个环节：
 
@@ -256,7 +247,7 @@ flowchart TB
 
 #### Modular RAG（模块化 RAG）
 
-![Modular RAG](//oss.smallyoung.cn/rag/7.png)
+![Modular RAG](//pub.smallyoung.cn/course_slidev/rag/7.png)
 
 将系统拆分为独立模块，像"乐高积木"一样灵活组合：
 
@@ -298,12 +289,9 @@ graph TB
 | **响应延迟** | 低 | 中 | 中-高 |
 | **可扩展性** | 低 | 中 | 高 |
 | **适合阶段** | MVP/原型 | 生产环境 | 企业级 |
-
----
-
 ### 3.2 检索增强：从平面向量到图结构
 
-![从平面向量到图结构](//oss.smallyoung.cn/rag/9.png)
+![从平面向量到图结构](//pub.smallyoung.cn/course_slidev/rag/9.png)
 
 基础 RAG 将文档切分为孤立的块，无法捕捉实体之间的关系。这一方向引入**图结构**解决多跳推理问题。
 
@@ -335,12 +323,9 @@ graph TB
 | 更新方式 | 全量重建 | 增量更新 |
 | Token 消耗 | 高 | 低（约 1/6000） |
 | 适用场景 | 知识密集型任务 | 成本敏感型生产环境 |
-
----
-
 ### 3.3 生成优化：从被动拼接到自主决策
 
-![从被动拼接到自主决策](//oss.smallyoung.cn/rag/10.png)
+![从被动拼接到自主决策](//pub.smallyoung.cn/course_slidev/rag/10.png)
 
 传统 RAG 的生成过程是"盲目的"——无论检索结果好坏都直接使用。这一方向引入**自我评估和纠错机制**。
 
@@ -378,12 +363,9 @@ flowchart TB
 **Speculative RAG 效果：**
 - 准确率提升最高 **12.97%**
 - 响应延迟降低最高 **51%**
-
----
-
 ### 3.4 智能融合：从静态工具到智能体
 
-![从静态工具到智能体](//oss.smallyoung.cn/rag/11.png)
+![从静态工具到智能体](//pub.smallyoung.cn/course_slidev/rag/11.png)
 
 这一方向代表 RAG 的**范式转变**——从被动的检索工具演变为智能体生态的核心组件。
 
@@ -408,9 +390,6 @@ flowchart TB
     I -->|是| K[生成答案]
     J --> B
 ```
-
----
-
 ### 3.5 模态扩展：从纯文本到多模态
 
 | 技术 | 解决的问题 | 核心思路 |
@@ -422,9 +401,6 @@ flowchart TB
 - 图片检索：根据图片内容查找相关文档
 - 视频问答：从视频库中检索相关片段
 - 音频搜索：根据语音内容检索信息
-
----
-
 ### 3.6 部署模式：从自建到服务化
 
 | 技术 | 解决的问题 | 核心思路 |
@@ -439,12 +415,9 @@ flowchart TB
 | **云端托管** | 快速启动、弹性扩展 | Pinecone、Zilliz Cloud |
 | **混合部署** | 平衡隐私与性能 | 敏感数据本地 + 通用知识云端 |
 | **边缘部署** | 隐私优先、离线可用 | Ollama + 本地向量库 |
-
----
-
 ### 3.7 技术选型指南
 
-![技术选型指南](//oss.smallyoung.cn/rag/12.png)
+![技术选型指南](//pub.smallyoung.cn/course_slidev/rag/12.png)
 
 根据业务需求选择合适的技术组合：
 
@@ -463,14 +436,11 @@ flowchart TB
 > - **效率优化**：LightRAG、Speculative RAG 大幅降低成本和延迟
 > - **智能融合**：RAG 内嵌于 Agent，实现自主决策
 > - **服务化部署**：云端/边缘多模式选择
-
----
-
 ## 4. 实践指南
 
 ### 4.1 技术栈推荐
 
-![技术栈推荐](//oss.smallyoung.cn/rag/13.png)
+![技术栈推荐](//pub.smallyoung.cn/course_slidev/rag/13.png)
 
 | 组件 | 推荐工具 | 说明 |
 |------|----------|------|
@@ -496,9 +466,6 @@ flowchart TB
 | 答案与问题无关 | 检索到的文档不相关 | 增加重排序、混合检索 |
 | LLM 幻觉严重 | 上下文不足或 Prompt 设计问题 | 优化 Prompt，增加相关文档数量 |
 | 响应速度慢 | 检索或重排序耗时 | 使用缓存、减少 top_k |
-
----
-
 ## 5. RAG 评估指标
 
 评估 RAG 系统的效果需要从**检索质量**和**生成质量**两个维度进行考量：
@@ -526,12 +493,9 @@ flowchart TB
 > - [RAGAS](https://github.com/explodinggradients/ragas) - 开源 RAG 评估框架
 > - [TruLens](https://www.trulens.org/) - LLM 应用评估平台
 > - [LangSmith](https://smith.langchain.com/) - LangChain 官方评估工具
-
----
-
 ## 6. RAG 常见挑战
 
-![RAG 常见挑战](//oss.smallyoung.cn/rag/14.png)
+![RAG 常见挑战](//pub.smallyoung.cn/course_slidev/rag/14.png)
 
 尽管 RAG 技术发展迅速，在实际应用中仍面临诸多挑战：
 
@@ -555,12 +519,9 @@ flowchart TB
 
 > [!WARNING]
 > **安全提醒**：在企业应用中，需特别注意知识库的**数据安全**和**隐私保护**，避免敏感信息泄露。可采用权限控制、数据脱敏等措施。
-
----
-
 ## 7. 未来展望
 
-![未来展望](//oss.smallyoung.cn/rag/15.png)
+![未来展望](//pub.smallyoung.cn/course_slidev/rag/15.png)
 
 RAG 技术仍在快速发展，以下是几个值得关注的方向：
 
@@ -569,9 +530,6 @@ RAG 技术仍在快速发展，以下是几个值得关注的方向：
 3. **跨模态理解**：图文音视频统一检索
 4. **可信 RAG**：增强答案可追溯性和可解释性
 5. **隐私保护 RAG**：在保护数据隐私的前提下进行检索
-
----
-
 ## 8. 参考资料
 
 ### 核心论文

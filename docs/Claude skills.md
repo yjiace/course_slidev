@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-21
 dateModified: 2025-12-21
 keywords: [Claude Skills, Anthropic, MCP, Model Context Protocol, AI技能, 智能体, 工作流自动化, Progressive Disclosure]
-cover: //oss.smallyoung.cn/skills/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/skills/cover.png
 ---
 
 # Claude Skills 完全指南 | Anthropic AI 技能系统教程
@@ -37,17 +37,17 @@ cover: //oss.smallyoung.cn/skills/cover.png
 
 **关键词**: Claude Skills、Anthropic、MCP、Model Context Protocol、AI 技能、智能体、工作流自动化、Progressive Disclosure
 
-![让 AI 成为你的专家助手：Claude Skills 完全指南](//oss.smallyoung.cn/skills/0.png)
+![让 AI 成为你的专家助手：Claude Skills 完全指南](//pub.smallyoung.cn/course_slidev/skills/0.png)
 
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
-  src="//oss.smallyoung.cn/skills/Claude_Skills：AI如何从助手进化成专家团队.m4a"
+  src="//pub.smallyoung.cn/course_slidev/skills/Claude_Skills：AI如何从助手进化成专家团队.m4a"
   title="让 AI 成为你的专家助手：Claude Skills 完全指南"
   author="SmallYoung"
 />
 
 <VideoPlayer 
-  src="//oss.smallyoung.cn/skills/从助手到专家：Claude_Skills_完全指南.mp4"
+  src="//pub.smallyoung.cn/course_slidev/skills/从助手到专家：Claude_Skills_完全指南.mp4"
 />
 
 <MindMapFloat title="让 AI 成为你的专家助手：Claude Skills 完全指南">
@@ -92,7 +92,7 @@ cover: //oss.smallyoung.cn/skills/cover.png
 
 ### 什么是 Claude Skills?
 
-![Claude Skills 主界面](//oss.smallyoung.cn/skills/1.png)
+![Claude Skills 主界面](//pub.smallyoung.cn/course_slidev/skills/1.png)
 
 **Claude Skills** 是 Anthropic 推出的一种技能封装系统,解决了一个核心问题:
 
@@ -100,7 +100,7 @@ cover: //oss.smallyoung.cn/skills/cover.png
 
 #### 传统 AI 助手的局限
 
-![传统 AI 助手的局限](//oss.smallyoung.cn/skills/2.png)
+![传统 AI 助手的局限](//pub.smallyoung.cn/course_slidev/skills/2.png)
 
 | 问题 | 描述 |
 |------|------|
@@ -124,7 +124,7 @@ Claude Skills 让你能够:
 - 💡 Token 高效:智能的渐进式加载机制
 - 🔧 易于管理:通过 Markdown 文件定义技能
 
-![核心优势](//oss.smallyoung.cn/skills/3.png)
+![核心优势](//pub.smallyoung.cn/course_slidev/skills/3.png)
 
 ### Skills 是什么样的?
 
@@ -196,7 +196,7 @@ metadata:               # 可选:自定义元数据
 
 ### 渐进式加载(Progressive Disclosure)
 
-![渐进式加载](//oss.smallyoung.cn/skills/4.png)
+![渐进式加载](//pub.smallyoung.cn/course_slidev/skills/4.png)
 
 这是 Agent Skills 最核心的设计理念,也是区别于传统提示词的关键。
 
@@ -256,7 +256,7 @@ Agent Skills 方式:
 
 ## Skills 与 MCP 的关系
 
-![Skills 与 MCP 的关系](//oss.smallyoung.cn/skills/5.png)
+![Skills 与 MCP 的关系](//pub.smallyoung.cn/course_slidev/skills/5.png)
 
 Claude Skills 和 MCP(Model Context Protocol)是互补的技术,理解它们的区别和协作方式非常重要。
 
@@ -334,7 +334,7 @@ description: "从 Notion 任务数据库生成标准周报"
 
 ## Skill 的结构
 
-![Skill 的结构](//oss.smallyoung.cn/skills/6.png)
+![Skill 的结构](//pub.smallyoung.cn/course_slidev/skills/6.png)
 
 ### 完整的 SKILL.md 文件格式
 
@@ -407,7 +407,7 @@ allowed-tools: "Bash(*) Read Write" # 可选:预批准的工具列表
 
 ### 5 分钟创建你的第一个 Skill
 
-![Skill 的结构](//oss.smallyoung.cn/skills/7.png)
+![Skill 的结构](//pub.smallyoung.cn/course_slidev/skills/7.png)
 
 #### 前置条件
 
@@ -617,7 +617,7 @@ Claude 会:
 
 ### 什么是技能编排?
 
-![Skill 的结构](//oss.smallyoung.cn/skills/8.png)
+![Skill 的结构](//pub.smallyoung.cn/course_slidev/skills/8.png)
 
 **技能编排(Skill Orchestration)** 是指 Claude 自动选择和组合多个 Skills 来完成复杂任务的能力。
 
@@ -693,7 +693,7 @@ graph LR
 
 ### 场景 1: 企业知识管理
 
-![企业知识管理](//oss.smallyoung.cn/skills/9.png)
+![企业知识管理](//pub.smallyoung.cn/course_slidev/skills/9.png)
 
 **需求**: 将公司内部文档转换为新员工培训材料
 
@@ -755,7 +755,7 @@ A: ...
 
 ### 场景 2: 代码审查助手
 
-![代码审查助手](//oss.smallyoung.cn/skills/10.png)
+![代码审查助手](//pub.smallyoung.cn/course_slidev/skills/10.png)
 
 **需求**: 标准化代码审查流程和反馈格式
 
@@ -823,7 +823,7 @@ version: "2.0"
 
 ### 场景 3: 客户支持自动化
 
-![客户支持自动化](//oss.smallyoung.cn/skills/11.png)
+![客户支持自动化](//pub.smallyoung.cn/course_slidev/skills/11.png)
 
 **需求**: 快速生成标准化的客户支持回复
 
@@ -854,7 +854,7 @@ version: "2.0"
 
 ## 最佳实践
 
-![最佳实践](//oss.smallyoung.cn/skills/12.png)
+![最佳实践](//pub.smallyoung.cn/course_slidev/skills/12.png)
 
 ### 编写高质量 Skill 的技巧
 
@@ -1154,7 +1154,7 @@ for (const skillFile of skillFiles) {
 
 ### 从"助手"到"专家"
 
-![从"助手"到"专家"](//oss.smallyoung.cn/skills/14.png)
+![从"助手"到"专家"](//pub.smallyoung.cn/course_slidev/skills/14.png)
 
 Claude Skills 的推出标志着 AI 助手的重要进化:
 
