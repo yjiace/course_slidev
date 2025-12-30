@@ -591,7 +591,3 @@ RAG 技术仍在快速发展，以下是几个值得关注的方向：
 - [RAGFlow 开源项目](https://github.com/infiniflow/ragflow)
 - [RAGAS 评估框架](https://github.com/explodinggradients/ragas)
 - [Microsoft GraphRAG](https://github.com/microsoft/graphrag)
-
----
-
-> **作者注：** 本文基于 2024 年最新的学术研究和业界实践编写，内容将持续更新。如有任何问题或建议，欢迎交流讨论。

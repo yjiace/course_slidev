@@ -1200,9 +1200,3 @@ Claude Skills 的推出标志着 AI 助手的重要进化:
 
 - [Claude Skills 示例库](https://github.com/topics/claude-skills)
 - [MCP Servers 集合](https://github.com/modelcontextprotocol/servers)
-
----
-
-**文档更新**: 2025-12-21  
-**版本**: 1.0  
-**作者**: SmallYoung

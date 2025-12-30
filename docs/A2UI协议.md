@@ -940,6 +940,4 @@ A2UI 协议由 Google 创建，采用 **Apache 2.0** 许可证开源，可免费
 - 设计原则和设计要求引用自官方规范的 Design Requirements 章节[^1]
 - 代码示例格式参考自官方规范的 Full Stream Example[^1]
 - 快速入门步骤完整引用自官方 Quickstart 页面[^3]
-*本文档基于 A2UI Protocol v0.8 (Stable) 官方规范整理*  
-*最后更新：2025年12月20日*  
-*贡献者：Google、CopilotKit、开源社区*
+
