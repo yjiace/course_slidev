@@ -20,7 +20,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/IntroductionTo
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
   src="//pub.smallyoung.cn/course_slidev/IntroductionToAgents/IntroductionToAgents.m4a"
-  title="让AI生成UI：A2UI协议完全指南"
   author="SmallYoung"
 />
 

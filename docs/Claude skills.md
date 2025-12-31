@@ -42,7 +42,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/skills/cover.p
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
   src="//pub.smallyoung.cn/course_slidev/skills/Claude_Skills：AI如何从助手进化成专家团队.m4a"
-  title="让 AI 成为你的专家助手：Claude Skills 完全指南"
   author="SmallYoung"
 />
 

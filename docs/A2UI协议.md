@@ -41,7 +41,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/a2ui/cover.png
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
   src="//pub.smallyoung.cn/course_slidev/a2ui/A2UI_%E5%AE%89%E5%85%A8%E7%94%9F%E6%88%90%E4%BA%A4%E4%BA%92%E5%BC%8F_AI_%E7%95%8C%E9%9D%A2.m4a"
-  title="让AI生成UI：A2UI协议完全指南"
   author="SmallYoung"
 />
 

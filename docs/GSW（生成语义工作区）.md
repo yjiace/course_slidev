@@ -16,7 +16,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/gsw/cover.png
 > 🎧 **更喜欢听？试试本文的音频版本**
 <AudioPlayer 
   src="//pub.smallyoung.cn/course_slidev/gsw/AI从健忘到理解故事因果.m4a"
-  title="给 AI 装上记忆系统：深度解读 GSW"
   author="SmallYoung"
 />
 
