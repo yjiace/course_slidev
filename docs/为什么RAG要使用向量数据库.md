@@ -54,6 +54,7 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag-vector/cov
 ```
 
 </MindMapFloat>
+
 ## 1. 先问问题：RAG 到底需要什么能力？
 
 ![RAG](//pub.smallyoung.cn/course_slidev/rag-vector/1.png)
