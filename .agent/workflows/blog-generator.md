@@ -62,7 +62,7 @@ flowchart TD
 
 - **文件名**：使用简洁的中文名称，如 `为什么RAG要使用向量数据库.md`
 - **主题简称**：从主题中提取 2-4 个关键词用连字符连接，如 `rag-vector`（用于图片路径）
-- **保存位置**：`d:\projects\course_slidev\docs\{文件名}.md`
+- **保存位置**：`{当前工程目录}/docs/{文件名}.md`
 
 ### 2.2 文档结构模板
 
@@ -353,7 +353,7 @@ no text, no watermark, high quality, 4K, 16:9 aspect ratio
 
 | 检查项 | 要求 |
 |--------|------|
-| 文件已保存 | `d:\projects\course_slidev\docs\{主题名称}.md` |
+| 文件已保存 | `{当前工程目录}/docs/{主题名称}.md` |
 | Frontmatter 完整 | title, category, tags, description, keywords, cover |
 | MindMapFloat | 包含知识图谱组件 |
 | mermaid 图表 | ≥2 个，语法正确 |
@@ -371,7 +371,7 @@ no text, no watermark, high quality, 4K, 16:9 aspect ratio
 ```
 博客文档已生成完成！
 
-📄 **文件位置**：d:\projects\course_slidev\docs\{文件名}.md
+📄 **文件位置**：{当前工程目录}/docs/{文件名}.md
 📊 **评估轮次**：{N} 轮
 ⭐ **综合评分**：{平均分}/5
 
