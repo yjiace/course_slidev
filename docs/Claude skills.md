@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-21
 dateModified: 2025-12-21
 keywords: [Claude Skills, Anthropic, MCP, Model Context Protocol, AI技能, 智能体, 工作流自动化, Progressive Disclosure]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/skills/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/skills/1.png
 ---
 
 # Claude Skills 完全指南 | Anthropic AI 技能系统教程
@@ -90,8 +90,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/skills/cover.p
 ## 协议概述
 
 ### 什么是 Claude Skills?
-
-![Claude Skills 主界面](//pub.smallyoung.cn/course_slidev/skills/1.png)
 
 **Claude Skills** 是 Anthropic 推出的一种技能封装系统,解决了一个核心问题:
 

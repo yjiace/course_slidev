@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-26
 dateModified: 2025-12-26
 keywords: [AI Agents, 智能体, Agentic AI, Kaggle, Model Context Protocol, MCP, RAG, 上下文工程, ADK, Agent Development Kit, A2A]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/IntroductionToAgents/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/IntroductionToAgents/1.png
 ---
 
 ## 写在前面
@@ -88,8 +88,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/IntroductionTo
 这门课程于 **2025 年 11 月 10-14 日**在 Kaggle 平台进行了 5 天的直播教学，目前已转为**自学指南**形式开放，全球开发者可随时免费学习。
 
 课程的核心理论基础来自 Google 于 **2024 年 9 月**发布的权威白皮书《**Agents**》，作者为 Google 的 **Julia Wiesinger、Patrick Marlow 和 Vladimir Vuskovic**。该白皮书系统性地阐述了 AI Agent 的架构设计、工具集成与编排策略。
-
-![课程背景](//pub.smallyoung.cn/course_slidev/IntroductionToAgents/1.png)
 
 ### 从 ChatBot 到 Agent
 

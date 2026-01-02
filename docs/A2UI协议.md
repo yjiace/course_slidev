@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-20
 dateModified: 2025-12-20
 keywords: [A2UI, Agent to UI, Google A2UI, AI UI协议, LLM UI, 智能体界面, 声明式UI, JSONL, 流式渲染, surfaceUpdate, dataModelUpdate, beginRendering]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/a2ui/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/a2ui/1.png
 ---
 
 # A2UI 协议完全指南 | Google AI智能体界面协议教程
@@ -102,8 +102,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/a2ui/cover.png
 ## 协议概述
 
 ### 什么是 A2UI 协议？
-
-![A2UI协议概述](//pub.smallyoung.cn/course_slidev/a2ui/1.png)
 
 **A2UI（Agent to UI）协议**是 Google 于 2025 年发布的开源协议（规范创建于 2025年9月19日[^1]），解决了一个核心问题：
 

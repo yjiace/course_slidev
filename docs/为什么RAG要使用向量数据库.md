@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-30
 dateModified: 2025-12-30
 keywords: [RAG, 向量数据库, Vector Database, Embedding, 语义搜索, FAISS, Milvus, Pinecone, OpenAI, BGE]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag-vector/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag-vector/1.png
 ---
 
 # 为什么 RAG 要使用向量数据库
@@ -56,8 +56,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag-vector/cov
 </MindMapFloat>
 
 ## 1. 先问问题：RAG 到底需要什么能力？
-
-![RAG](//pub.smallyoung.cn/course_slidev/rag-vector/1.png)
 
 在讲向量数据库之前，我们先思考一个问题：
 

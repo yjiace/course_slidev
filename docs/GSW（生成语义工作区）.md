@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-14
 dateModified: 2025-12-15
 keywords: [GSW, 生成语义工作区, RAG, 检索增强生成, AI记忆系统, 大语言模型, 情景记忆, 知识图谱]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/gsw/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/gsw/1.png
 ---
 
 ![AI记忆革命：GSW vs.传统 RAG](//pub.smallyoung.cn/course_slidev/gsw/0.png)
@@ -132,8 +132,6 @@ RAG（检索增强生成）是目前主流的让 AI 访问外部知识的技术�
 ### 四大核心问题
 
 #### 1. 记忆碎片化 🧩
-
-![记忆碎片化](//pub.smallyoung.cn/course_slidev/gsw/1.png)
 
 **场景举例**：你在读一本侦探小说，想问"凶手是怎么一步步暴露的？"
 

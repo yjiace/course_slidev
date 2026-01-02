@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-30
 dateModified: 2025-12-30
 keywords: [RAG, 检索增强生成, Retrieval-Augmented Generation, LLM, 大语言模型, 向量数据库, 知识库问答, GraphRAG, LangChain, LlamaIndex]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag/1.png
 ---
 
 # RAG 检索增强生成入门指南
@@ -69,8 +69,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/rag/cover.png
 />
 
 ## 1. 什么是 RAG？
-
-![什么是RAG](//pub.smallyoung.cn/course_slidev/rag/1.png)
 
 ### 1.1 RAG 的起源
 

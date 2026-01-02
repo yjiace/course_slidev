@@ -7,7 +7,7 @@ author: smallyoung
 date: 2025-12-31
 dateModified: 2025-12-31
 keywords: [MVC, DDD, 领域驱动设计, 架构模式, Spring Boot, 软件架构, 贫血模型, 充血模型]
-cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/mvc-ddd/cover.png
+cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/mvc-ddd/1.png
 ---
 
 # MVC与DDD架构模式：从UI分离到领域建模的演进之路
@@ -57,8 +57,6 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/mvc-ddd/cover.
 </MindMapFloat>
 
 ## 1. 核心问题导入
-
-![架构演进之路](//pub.smallyoung.cn/course_slidev/mvc-ddd/1.png)
 
 想象这样一个场景：你负责维护一个电商系统，最初只是简单的商品展示和下单功能，采用经典的MVC三层架构，一切运行良好。
 
