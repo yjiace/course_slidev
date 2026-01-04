@@ -114,6 +114,9 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/gsw/1.png
 今天要介绍的 GSW（Generative Semantic Workspace，生成语义工作区）技术，正在改变这一切——它让 AI 拥有了类似人类的"情景记忆"能力！
 
 > **GSW（Generative Semantic Workspace，生成语义工作区）是一种新型 AI 记忆架构，通过模拟人类大脑的海马体和新皮层机制，将零散信息组织成结构化的"世界模型"，使 AI 能够理解事件的时间线、因果关系和完整叙事。**
+>
+> 📌 **核心论文**：[Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces](https://arxiv.org/abs/2511.07587)（arXiv:2511.07587）  
+> 📌 **适合人群**：AI 开发者、RAG 系统设计者、对 AI 记忆系统感兴趣的技术人员
 
 ## 传统 RAG 的痛点
 
@@ -701,4 +704,4 @@ GSW 迈出了重要的一步——让 AI 拥有了"记忆"。不是机械的存�
 > 
 > 发表：AAAI 2026 (Oral Paper)
 > 
-> 链接：[arXiv:2511.07587](https://arxiv.org/abs/2511.07587)
+> 链接：[Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces](https://arxiv.org/abs/2511.07587)（arXiv:2511.07587）

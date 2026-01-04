@@ -187,6 +187,45 @@ flowchart LR
   - `> [!CAUTION]` - 常见错误
 - 引用**权威来源**（论文、官方文档）
 
+### 2.4 论文引用规范
+
+**arXiv 论文必须使用统一格式**（用于 llms.txt 自动提取）：
+
+```markdown
+[论文标题](https://arxiv.org/abs/XXXX.XXXXX)（arXiv:XXXX.XXXXX）
+```
+
+**导语核心论文标记**（会被自动提取到 llms.txt）：
+
+```markdown
+> 📌 **核心论文**：[Title](https://arxiv.org/abs/XXXX.XXXXX)（arXiv:XXXX.XXXXX）  
+> 📌 **适合人群**：...
+```
+
+> [!IMPORTANT]
+> **只有导语中的 `📌 **核心论文**` 或 `📌 **原始论文**` 标记会被自动提取**。  
+> 标记必须位于文档开头 4000 字符内（在 MindMap 组件之后、正文之前）。
+
+**使用场景**：
+
+| 场景 | 格式 | 是否提取 |
+|------|------|----------|
+| 导语核心论文 | `> 📌 **核心论文**：[Title](url)（arXiv:ID）` | ✅ 会提取 |
+| 正文引用 | `[Title](url)（arXiv:ID）` | ❌ 不提取 |
+| 参考资料表格 | `[Title](url)` | ❌ 不提取 |
+
+**正确示例**：
+```markdown
+> 📌 **核心论文**：[Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)（arXiv:2005.11401）
+```
+
+**错误示例**：
+```markdown
+❌ 论文名称是 arXiv:2005.11401（缺少论文标题和链接）
+❌ [arXiv:2005.11401](https://arxiv.org/abs/2005.11401)（链接文本不应是 ID）
+❌ 📌 核心论文：...（缺少粗体标记 **核心论文**）
+```
+
 ---
 
 ## 3. SEO 与 GEO 优化

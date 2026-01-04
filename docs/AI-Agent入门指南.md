@@ -14,7 +14,7 @@ cover: //pub.smallyoung.cn/cdn-cgi/image/quality=60/course_slidev/ai-agent/1.png
 
 > 本文将带你深入理解 AI Agent（智能体）的核心原理，从"是什么"到"怎么用"，帮助你掌握这一改变 AI 应用范式的关键技术。
 >
-> 📌 **核心论文**：[A Survey on Large Language Model based Autonomous Agents](https://arxiv.org/abs/2308.11432)  
+> 📌 **核心论文**：[A Survey on Large Language Model based Autonomous Agents](https://arxiv.org/abs/2308.11432)（arXiv:2308.11432）  
 > 📌 **适合人群**：AI 初学者、后端开发者、对智能应用感兴趣的技术人员
 
 ![AI Agent 入门指南](//pub.smallyoung.cn/course_slidev/ai-agent/0.png)

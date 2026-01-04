@@ -124,6 +124,141 @@ export const docsSidebar = ${JSON.stringify(sidebarItems, null, 2)}
     console.log(`  ✓ 生成侧边栏配置: ${sidebarItems.length} 个分类`)
 }
 
+/**
+ * 生成 llms.txt 文件 (GEO 优化)
+ * 为 LLM 提供网站内容索引，构建时自动生成
+ */
+async function generateLlmsTxt() {
+    console.log('🤖 生成 llms.txt (GEO 优化)...')
+
+    const docs = await scanDocs({
+        baseDir: sourceDir,
+        exclude: ['node_modules', 'dist', '.git', '.buildcache']
+    })
+
+    const updateDate = new Date().toISOString().split('T')[0]
+
+    // 按分类分组文档
+    const categoryMap = new Map()
+    // 按分类收集核心论文引用：category -> [{arxivId, title}]
+    const categoryReferences = new Map()
+
+    for (const doc of docs) {
+        if (!categoryMap.has(doc.category)) {
+            categoryMap.set(doc.category, [])
+            categoryReferences.set(doc.category, [])
+        }
+        categoryMap.get(doc.category).push(doc)
+
+        // 只从导语提取核心论文（📌 **核心论文**）
+        if (doc.meta && doc.meta.content) {
+            const coreRef = extractCoreReference(doc.meta.content)
+            if (coreRef) {
+                categoryReferences.get(doc.category).push(coreRef)
+            }
+        }
+    }
+
+    // 生成 llms.txt 内容
+    let content = `# llms.txt - LLM Content Index
+# 网站：www.smallyoung.cn
+# 更新日期：${updateDate}
+# 本文件由构建脚本自动生成，请勿手动编辑
+
+## 网站概述
+SmallYoung 是一个技术博客与课件系统，专注于 AI、大模型、软件开发领域的技术分享与教学。
+
+## 内容索引
+
+`
+
+    // 按分类名称排序
+    const sortedCategories = Array.from(categoryMap.keys()).sort((a, b) => a.localeCompare(b, 'zh-CN'))
+
+    for (const category of sortedCategories) {
+        const docList = categoryMap.get(category)
+        // 按日期倒序排列（最新的在前面）
+        docList.sort((a, b) => {
+            const dateA = a.date ? new Date(a.date) : new Date(0)
+            const dateB = b.date ? new Date(b.date) : new Date(0)
+            return dateB - dateA
+        })
+
+        content += `### ${category}\n`
+        for (const doc of docList) {
+            content += `- ${doc.docUrl} - ${doc.title}: ${doc.description}\n`
+        }
+        content += '\n'
+    }
+
+    // 生成权威来源声明（按分类组织核心论文）
+    content += `## 权威来源声明
+本站内容基于学术论文、官方文档和实际项目经验编写。
+
+`
+
+    let totalRefs = 0
+    for (const category of sortedCategories) {
+        const refs = categoryReferences.get(category)
+        if (refs && refs.length > 0) {
+            content += `### ${category}核心论文\n`
+            // 去重
+            const seen = new Set()
+            for (const ref of refs) {
+                if (!seen.has(ref.arxivId)) {
+                    seen.add(ref.arxivId)
+                    content += `- [${ref.title}](https://arxiv.org/abs/${ref.arxivId})（arXiv:${ref.arxivId}）\n`
+                    totalRefs++
+                }
+            }
+            content += '\n'
+        }
+    }
+
+    if (totalRefs === 0) {
+        content += `暂无自动提取的核心论文引用\n\n`
+    }
+
+    content += `## 联系方式
+如需引用本站内容，请注明出处：SmallYoung (www.smallyoung.cn)
+`
+
+    const llmsTxtPath = path.join(projectRoot, 'portal', 'public', 'llms.txt')
+    fs.writeFileSync(llmsTxtPath, content)
+    console.log(`  ✓ 生成 llms.txt: ${docs.length} 篇文档, ${totalRefs} 篇核心论文`)
+}
+
+/**
+ * 从文档导语中提取核心论文引用
+ * 
+ * 只匹配导语中标记为 📌 **核心论文** 的引用
+ * 统一格式：[论文标题](https://arxiv.org/abs/XXXX.XXXXX)（arXiv:XXXX.XXXXX）
+ * 
+ * @param {string} content - Markdown 内容
+ * @returns {{arxivId: string, title: string} | null} 核心论文信息或 null
+ */
+function extractCoreReference(content) {
+    // 搜索导语部分（开头 4000 字符内的核心论文标记）
+    // 扩大范围以覆盖包含 MindMap 组件等大型组件的文档
+    const introSection = content.substring(0, 4000)
+
+    // 匹配 📌 **核心论文** 或 📌 **原始论文** 后的链接
+    const corePattern = /📌\s*\*\*(核心论文|原始论文)\*\*[：:]\s*\[([^\]]+)\]\(https?:\/\/arxiv\.org\/abs\/(\d+\.\d+)[^)]*\)/i
+
+    const match = corePattern.exec(introSection)
+    if (match) {
+        const title = match[2].trim()
+        const arxivId = match[3]
+
+        // 跳过链接文本是 arXiv ID 本身的情况
+        if (!title.toLowerCase().includes('arxiv')) {
+            return { arxivId, title }
+        }
+    }
+
+    return null
+}
+
 // 主函数
 async function main() {
     console.log('📄 开始复制文档到门户...')
@@ -139,6 +274,9 @@ async function main() {
 
     // 生成侧边栏配置
     await generateSidebarConfig()
+
+    // 生成 llms.txt (GEO 优化)
+    await generateLlmsTxt()
 
     console.log('✅ 文档复制完成')
 }

@@ -1,0 +1,35 @@
+# llms.txt - LLM Content Index
+# 网站：www.smallyoung.cn
+# 更新日期：2026-01-04
+# 本文件由构建脚本自动生成，请勿手动编辑
+
+## 网站概述
+SmallYoung 是一个技术博客与课件系统，专注于 AI、大模型、软件开发领域的技术分享与教学。
+
+## 内容索引
+
+### 后端开发
+- /docs/MVC与DDD架构模式 - MVC与DDD架构模式：从UI分离到领域建模的演进之路: 深入解析MVC与DDD两大架构模式的核心区别，从UI分离到复杂业务建模，帮助开发者选择合适的架构方案。包含实战代码和最佳实践。
+
+### 人工智能
+- /docs/GEO与SEO - 从SEO到GEO：AI时代的生成式引擎优化新范式: 全面解析GEO（生成式引擎优化）与SEO（搜索引擎优化）的区别与联系，掌握AI时代内容优化的核心策略，提升品牌在AI搜索中的可见性。
+- /docs/大模型的开源与闭源 - AI大模型的航线抉择：开源与闭源的战略罗盘: 以讨论的视角全面剖析大模型开源与闭源的本质差异、各自利弊、真实挑战与安全风险，帮助读者形成独立判断。
+- /docs/AI-Agent入门指南 - AI Agent 入门指南：从概念到实践的完整解读: 全面解读AI Agent（智能体）的核心概念、工作原理和实践应用。从零开始理解AI Agent如何感知、决策、执行，以及如何使用LangChain等框架构建自己的智能代理。
+- /docs/RAG检索增强生成入门指南 - RAG 检索增强生成入门指南: 全面介绍 RAG（检索增强生成）技术的核心概念、三种主流架构对比（Naive/Advanced/Modular）、2024 年前沿技术（GraphRAG、SELF-RAG、CRAG）以及实践指南。面向初学者的权威教程。
+- /docs/为什么RAG要使用向量数据库 - 为什么 RAG 要使用向量数据库: 面向初学者，从第一性原理深入解析 RAG 为什么必须使用向量数据库。详解向量、Embedding、相似度计算等核心概念，全面对比主流 Embedding 模型维度与向量数据库特性。
+- /docs/Introduction to Agents - 从预测到行动：Google 5 天 AI 智能体 (AI Agents) 强化课程完全指南: 本文为您深度拆解 Google 官方 "5-Day AI Agents Intensive" 课程的核心精华。从零基础入门，到掌握 MCP 协议、上下文工程、质量评估 (Agent Ops) 及生产环境部署，带您全面掌握构建下一代智能应用的关键技术。
+- /docs/Claude skills - 让 AI 成为你的专家助手：Claude Skills 完全指南: 深入解析 Anthropic Claude Skills 技术原理,了解如何通过可复用的技能包让 Claude 成为你的专业助手。涵盖 Skills 与 MCP 协议的关系、渐进式加载机制、技能编排等核心技术。
+- /docs/A2UI协议 - 让 AI 生成 UI：A2UI 协议完全指南: 深入解析 Google A2UI（Agent to UI）协议，了解如何让 AI 智能体安全地生成跨平台交互式界面。涵盖 JSONL 流式传输、邻接列表组件模型、BoundValue 数据绑定、事件处理等核心技术。
+- /docs/GSW（生成语义工作区） - 给 AI 装上"记忆系统"：深度解读 GSW（生成语义工作区）: 深入解析 GSW（Generative Semantic Workspace，生成语义工作区）技术原理，对比传统 RAG 的痛点，揭示 AI 如何通过结构化记忆实现情景理解与复杂推理。
+
+## 权威来源声明
+本站内容基于学术论文、官方文档和实际项目经验编写。
+
+### 人工智能核心论文
+- [A Survey on Large Language Model based Autonomous Agents](https://arxiv.org/abs/2308.11432)（arXiv:2308.11432）
+- [GEO: Generative Engine Optimization](https://arxiv.org/abs/2311.09735)（arXiv:2311.09735）
+- [Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces](https://arxiv.org/abs/2511.07587)（arXiv:2511.07587）
+- [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)（arXiv:2005.11401）
+
+## 联系方式
+如需引用本站内容，请注明出处：SmallYoung (www.smallyoung.cn)

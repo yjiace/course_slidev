@@ -516,7 +516,7 @@ top_k = sorted(similarities)[:k]
 
 ### 8.3 HNSW 算法（最流行）
 
-**HNSW（Hierarchical Navigable Small World）** 是目前最广泛使用的索引算法，由 Malkov 和 Yashunin 于 2016 年提出（arXiv:1603.09320）。
+**HNSW（Hierarchical Navigable Small World）** 是目前最广泛使用的索引算法，由 Malkov 和 Yashunin 于 2016 年提出（[Efficient and robust approximate nearest neighbor search using HNSW graphs](https://arxiv.org/abs/1603.09320)（arXiv:1603.09320））。
 
 **核心思想**：构建一个多层的"导航图"。
 
