@@ -17,16 +17,14 @@ flowchart TD
     Step3 --> Step4[4. 内容质量评估]
     Step4 --> Check{是否有修改意见?}
     Check -->|是| Step2
-    Check -->|否| Step5[5. 生成封面提示词]
-    Step5 --> Step6[6. 输出检查]
-    Step6 --> End([完成并通知用户])
+    Check -->|否| Step5[5. 输出检查]
+    Step5 --> End([完成并通知用户])
     
     style Step1 fill:#e3f2fd
     style Step2 fill:#e8f5e9
     style Step3 fill:#fff3e0
     style Step4 fill:#fce4ec
-    style Step5 fill:#f3e5f5
-    style Step6 fill:#e0f7fa
+    style Step5 fill:#e0f7fa
 ```
 
 ---
@@ -276,7 +274,7 @@ flowchart TD
     C -->|是| D{迭代次数 < 3?}
     D -->|是| E[返回第2步修改]
     E --> A
-    D -->|否| F[记录剩余问题，进入第5步]
+    D -->|否| F[记录剩余问题，进入输出检查]
     C -->|否| F
 ```
 
@@ -332,63 +330,16 @@ flowchart TD
 
 ### ⏭️ 下一步
 - [ ] **有修改意见且迭代<3轮**：返回第2步修改
-- [ ] **无修改意见或已迭代3轮**：进入第5步
+- [ ] **无修改意见或已迭代3轮**：进入输出检查
 ```
 
 ---
 
-## 5. 封面提示词生成
-
-**目标**：生成 Nano Banana Pro 风格的封面图提示词。
-
-**前置条件**：已通过第 4 步评估（无修改意见或已迭代 3 轮）。
-
-### 5.1 提示词构造规则
-
-| 元素 | 要求 | 示例 |
-|------|------|------|
-| 主题视觉化 | 将抽象概念转为可视化元素 | 向量 → 连接的数据点 |
-| 风格 | 现代科技感、扁平/3D | abstract tech, 3D isometric |
-| 色调 | 深色背景+渐变亮色 或 明亮简洁 | dark blue to purple gradient |
-| 构图 | 居中、层次分明 | centered composition |
-| 排除项 | 无文字、无水印 | no text, no watermark |
-
-### 5.2 提示词模板
-
-```
-{主题核心视觉概念的英文描述},
-{与主题相关的视觉元素，如：floating data points, neural network, code blocks},
-{风格：abstract tech visualization / flat design / 3D isometric / minimalist},
-{色调：dark gradient background from {颜色1} to {颜色2} with {强调色} accents},
-{构图：centered composition / asymmetric layout / depth of field},
-modern digital art style, clean and professional,
-no text, no watermark, high quality, 4K, 16:9 aspect ratio
-```
-
-### 5.3 生成示例
-
-**输入主题**：为什么 RAG 要使用向量数据库
-
-**输出提示词**：
-```
-Abstract visualization of vector database and semantic search,
-floating data points connected by glowing neural network lines,
-geometric shapes representing high-dimensional vectors in space,
-3D isometric style with depth,
-dark gradient background from deep blue to purple,
-cyan and teal accent lights on data nodes,
-centered composition with layered depth of field,
-modern tech visualization, clean and futuristic,
-no text, no watermark, high quality, 4K, 16:9 aspect ratio
-```
-
----
-
-## 6. 输出检查与用户通知
+## 5. 输出检查与用户通知
 
 **目标**：确保所有输出完整，并通知用户审阅。
 
-### 6.1 最终检查清单
+### 5.1 最终检查清单
 
 | 检查项 | 要求 |
 |--------|------|
@@ -400,9 +351,8 @@ no text, no watermark, high quality, 4K, 16:9 aspect ratio
 | 代码示例 | 可运行，有注释 |
 | 权威引用 | ≥2 个论文/官方文档 |
 | 评估报告 | 已生成 |
-| 封面提示词 | 已生成 |
 
-### 6.2 用户通知
+### 5.2 用户通知
 
 完成所有步骤后，使用 `notify_user` 工具通知用户：
 
@@ -413,9 +363,6 @@ no text, no watermark, high quality, 4K, 16:9 aspect ratio
 📄 **文件位置**：{当前工程目录}/docs/{文件名}.md
 📊 **评估轮次**：{N} 轮
 ⭐ **综合评分**：{平均分}/5
-
-🎨 **封面提示词**：
-{封面提示词}
 
 请审阅文档内容，如需调整请告知。
 ```

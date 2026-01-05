@@ -16,6 +16,9 @@ portal/docs/
 # 自动生成的侧边栏配置
 portal/.vitepress/sidebar.generated.ts
 
+# 自动生成的 LLM 索引文件
+portal/public/llms.txt
+
 # 日志文件
 *.log
 npm-debug.log*
