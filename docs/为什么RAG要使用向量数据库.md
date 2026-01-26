@@ -221,31 +221,42 @@ Embedding 模型（如 BERT、GPT）是通过**海量文本数据训练**出来�
 
 不同的 Embedding 模型生成的向量维度不同。**维度越高，通常能捕捉越丰富的语义信息，但也需要更多存储空间和计算资源**。
 
-### 4.1 主流 Embedding 模型对比（2024）
+### 4.1 主流 Embedding 模型对比（2026）
 
 ![模型对比](//pub.smallyoung.cn/course_slidev/rag-vector/7.png)
 
 | 厂商 | 模型名称 | 向量维度 | 特点 |
 |------|----------|----------|------|
-| **OpenAI** | text-embedding-3-small | 1536 维 | 性价比高，支持动态降维到 512 维 |
-| **OpenAI** | text-embedding-3-large | 3072 维 | 最高精度，支持降维到 256/1024 维 |
+| **OpenAI** | text-embedding-3-small | 1536 维 | 性价比高，支持动态降维到 512 维，$0.020/1M tokens |
+| **OpenAI** | text-embedding-3-large | 3072 维 | 最高精度，支持降维到 256/1024 维，$0.130/1M tokens |
 | **OpenAI** | text-embedding-ada-002 | 1536 维 | 上一代模型，仍广泛使用 |
+| **阿里通义千问** | text-embedding-v4 | 64-2048 维（可调） | 性能较 v3 提升 15%-40%，多语言支持，8K 长文本 |
+| **阿里通义千问** | Qwen3-Embedding-8B | 可变维度 | 开源旗舰模型，MTEB 榜单优秀 |
+| **阿里通义千问** | Qwen3-VL-Embedding | 多模态 | 多模态嵌入，支持图文跨模态检索（2026 年 1 月发布）|
+| **智谱 AI** | Embedding-3 | 可变维度 | 支持自定义向量维度，性能与成本平衡 |
+| **百度文心** | 文心 5.0 Embedding | 多模态 | 原生全模态统一建模，2.4 万亿参数 MoE 架构 |
+| **字节豆包** | doubao-embedding | 标准维度 | 中英双语支持，面向向量检索场景 |
+| **Kimi (月之暗面)** | Kimi Embedding | 标准维度 | 支持超长文本，Context Caching 技术降低成本 90% |
 | **BAAI** | BGE-large-zh-v1.5 | 1024 维 | 中文最佳开源模型之一 |
 | **BAAI** | BGE-M3 | 1024 维 | 多语言、多功能 |
+| **Cohere** | embed-v4.0 | 256-1536 维（可调）| 多模态支持，100+ 语言，128K 上下文，$0.12/1M tokens |
 | **Cohere** | Embed English v3 | 1024 维 | 企业级英文模型 |
-| **Cohere** | Embed v4 | 1536 维 | 最新多模态模型 |
 | **Jina AI** | jina-embeddings-v3 | 1024 维 | 支持 8K 长文本，可降维到 32 维 |
-| **Jina AI** | jina-embeddings-v2-base | 768 维 | 基础版本 |
+| **Voyage AI** | voyage-3.5-lite | 512 维 | 轻量高效，成本优化 |
 | **Voyage AI** | voyage-3 | 1024 维 | 检索质量优秀 |
 | **Voyage AI** | voyage-3-large | 2048 维 | 支持降维到 256/512/1024 维 |
-| **Voyage AI** | voyage-3-lite | 512 维 | 轻量版，速度快 |
 | **Google** | Gemini text-embedding-004 | 768 维 | Google 最新模型 |
+| **Mistral** | mistral-embed | 标准维度 | MTEB 榜单最高准确率 77.8%（2026 年初）|
 
 > [!TIP]
-> **选型建议**：
-> - **中文场景**：优先考虑 BGE 系列（开源免费）或 OpenAI text-embedding-3
-> - **英文场景**：OpenAI、Cohere、Voyage AI 都是优秀选择
-> - **成本敏感**：使用支持"动态降维"的模型（如 text-embedding-3），降低存储成本
+> **选型建议（2026 年更新）**：
+> - **中文场景**：优先考虑阿里通义千问 Qwen3-Embedding（开源高性能）、智谱 Embedding-3（灵活可调）或 BGE 系列（开源免费）
+> - **国内部署**：百度文心 5.0（多模态）、字节豆包 doubao-embedding（中英双语）
+> - **超长文本**：Kimi Embedding（Context Caching 技术）或阿里 text-embedding-v4（8K 支持）
+> - **多模态需求**：阿里 Qwen3-VL-Embedding、百度文心 5.0、Cohere embed-v4.0
+> - **英文场景**：OpenAI text-embedding-3-large、Voyage AI、Mistral-embed（最高准确率）
+> - **成本敏感**：使用支持"动态降维"的模型（如 OpenAI text-embedding-3、阿里 text-embedding-v4、Cohere embed-v4.0），降低存储成本
+> - **快速原型**：OpenAI text-embedding-3-small（性价比高）或 Voyage-3.5-lite（轻量快速）
 
 ### 4.2 向量维度的影响
 
