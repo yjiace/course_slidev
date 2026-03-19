@@ -213,6 +213,7 @@ export default withMermaid(defineConfig({
   // Markdown 配置
   markdown: {
     lineNumbers: true,
+    math: true,
     theme: {
       light: 'github-light',
       dark: 'github-dark'
@@ -243,6 +244,17 @@ export default withMermaid(defineConfig({
         token.attrSet('loading', 'lazy')
         return defaultImageRender(tokens, idx, options, env, self)
       }
+
+      // Mermaid 换行支持：自动将代码块中的 \n 转换为 <br/>
+      const defaultFence = md.renderer.rules.fence
+      md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+        const token = tokens[idx]
+        if (token.info.trim() === 'mermaid') {
+          // 处理内容中的 \n -> <br/>
+          token.content = token.content.replace(/\\n/g, '<br/>')
+        }
+        return defaultFence!(tokens, idx, options, env, self)
+      }
     }
   },
 
@@ -254,7 +266,17 @@ export default withMermaid(defineConfig({
 
   // Mermaid 配置
   mermaid: {
-    theme: 'default'
+    theme: 'default',
+    flowchart: {
+      htmlLabels: true,
+      useMaxWidth: true,
+      curve: 'linear',
+      padding: 20,
+      nodeSpacing: 50,
+      rankSpacing: 50
+    },
+    // 增加全局安全边距，防止内容被遮挡
+    securityLevel: 'loose'
   },
   mermaidPlugin: {
     class: 'mermaid-diagram'
